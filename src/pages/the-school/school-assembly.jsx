@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { Sun, Mic, Bell, Music, Calendar, Star, BookOpen, Users } from 'lucide-react';
 
 // Scroll-reveal component
 function Reveal({ children, className = "", delay = 0, threshold = 0.15, from = "up" }) {
@@ -28,17 +29,17 @@ function Reveal({ children, className = "", delay = 0, threshold = 0.15, from = 
 
   const hiddenTransform =
     from === "left"
-      ? "-translate-x-6"
+      ? "-translate-x-8"
       : from === "right"
-      ? "translate-x-6"
+      ? "translate-x-8"
       : from === "down"
-      ? "-translate-y-6"
-      : "translate-y-6"; // default up
+      ? "-translate-y-8"
+      : "translate-y-8";
 
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out will-change-transform ${
+      className={`transition-all duration-700 ease-out ${
         isVisible ? "opacity-100 translate-x-0 translate-y-0" : `opacity-0 ${hiddenTransform}`
       } ${className}`}
       style={{ transitionDelay: `${delay}ms` }}
@@ -64,7 +65,7 @@ const SchoolAssembly = () => {
     content: [
       {
         id: 1,
-        paragraph: "The morning assembly at Sree Buddha Central School is a cornerstone of our daily routine, bringing together students and staff to start the day with inspiration, motivation, and a sense of unity. Each assembly begins with a prayer, followed by the national anthem, instilling patriotism and respect for our nation."
+        paragraph: "The morning assembly at Sree Narayana Public School is a cornerstone of our daily routine, bringing together students and staff to start the day with inspiration, motivation, and a sense of unity. Each assembly begins with a prayer, followed by the national anthem, instilling patriotism and respect for our nation."
       },
       {
         id: 2,
@@ -131,160 +132,236 @@ const SchoolAssembly = () => {
     content: parseDescription(assemblyData.description)
   } : staticData;
 
+  // Assembly highlights with icons
+  const highlights = [
+    {
+      icon: Sun,
+      title: "Prayer & Anthem",
+      description: "Daily prayers and national anthem to start the day with positivity and patriotism"
+    },
+    {
+      icon: BookOpen,
+      title: "Thought of the Day",
+      description: "Inspiring thoughts and motivational messages shared by students"
+    },
+    {
+      icon: Bell,
+      title: "Announcements",
+      description: "Important updates, achievements, and upcoming events"
+    },
+    {
+      icon: Music,
+      title: "Cultural Programs",
+      description: "Student performances showcasing talents and creativity"
+    }
+  ];
+
   return (
-    <div className="relative bg-gradient-to-br from-blue-50 via-white to-blue-50 py-16 lg:py-24 overflow-hidden">
-      {/* Background Pattern - Consistent with other sections */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-[#0D47A1] rounded-full translate-x-1/3 -translate-y-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-yellow-400 rounded-full -translate-x-1/2 translate-y-1/2"></div>
+    <div className="relative bg-gradient-to-br from-[#F7F9FC] via-white to-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-80 h-80 bg-[#123C73]/3 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#F4C430]/3 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#123C73]/2 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        {/* Header Section - Consistent Design */}
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Header Section */}
+        <div className="text-center mb-12 lg:mb-20">
           <Reveal>
-            <div className="inline-flex items-center px-4 py-2 bg-[#0D47A1]/10 rounded-full border border-[#0D47A1]/20 mb-6">
-              <div className="w-2 h-2 bg-[#0D47A1] rounded-full mr-2 animate-pulse"></div>
-              <span className="text-[#0D47A1] font-semibold text-sm tracking-wide">DAILY ROUTINE</span>
+            <div className="inline-flex items-center px-5 py-2.5 bg-[#123C73]/5 rounded-full border border-[#123C73]/10 mb-6">
+              <Sun className="w-4 h-4 text-[#F4C430] mr-2" />
+              <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                Daily Routine
+              </span>
             </div>
           </Reveal>
           
           <Reveal delay={100}>
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-              School <span className="bg-gradient-to-r from-[#0D47A1] to-[#1565C0] bg-clip-text text-transparent">Assembly</span>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#1B1F24] mb-6 leading-tight">
+              School{" "}
+              <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
+                Assembly
+              </span>
             </h2>
           </Reveal>
           
           <Reveal delay={200}>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-[#667085] max-w-3xl mx-auto leading-relaxed font-light">
               {displayData.subtitle}
             </p>
           </Reveal>
+
+          {/* Decorative Divider */}
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <div className="h-px w-12 bg-[#F4C430]/30"></div>
+            <div className="w-2 h-2 bg-[#F4C430] rounded-full rotate-45"></div>
+            <div className="h-px w-12 bg-[#F4C430]/30"></div>
+          </div>
         </div>
 
         {/* Loading State */}
         {loading && (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-[#0D47A1]"></div>
-            <p className="mt-4 text-gray-600">Loading assembly information...</p>
+          <div className="text-center py-16">
+            <div className="relative inline-block">
+              <div className="w-16 h-16 border-4 border-[#123C73]/10 rounded-full"></div>
+              <div className="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-t-[#F4C430] rounded-full animate-spin"></div>
+            </div>
+            <p className="mt-6 text-[#667085] font-medium">Loading assembly information...</p>
           </div>
         )}
 
         {/* Error State */}
         {error && !loading && (
           <div className="text-center py-12">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
-              <p className="text-red-600">Unable to load assembly data. Showing default content.</p>
+            <div className="bg-white rounded-3xl p-8 shadow-lg border border-[#123C73]/5 max-w-md mx-auto">
+              <div className="w-16 h-16 bg-[#F4C430]/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Star className="w-8 h-8 text-[#123C73]" />
+              </div>
+              <p className="text-[#667085]">Unable to load assembly data. Showing default content.</p>
             </div>
           </div>
         )}
 
         {/* Content Section */}
         {!loading && (
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            {/* Image Section */}
-            <div className="relative">
-              <Reveal delay={300}>
-                <div className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
-                  <img 
-                    src={displayData.image.url}
-                    alt={displayData.image.alt}
-                    className="w-full h-auto object-cover"
-                    onError={(e) => {
-                      // Fallback to static image if CMS image fails to load
-                      e.target.src = staticData.image.url;
-                    }}
-                  />
-                  {/* Subtle overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div>
-                </div>
-              </Reveal>
-            </div>
+          <>
+            <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center mb-16">
+              {/* Image Section */}
+              <div className="relative">
+                <Reveal delay={300}>
+                  <div className="relative">
+                    {/* Main Image Container */}
+                    <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-[#123C73]/10 group">
+                      <img 
+                        src={displayData.image.url}
+                        alt={displayData.image.alt}
+                        className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                        onError={(e) => {
+                          e.target.src = staticData.image.url;
+                        }}
+                      />
+                      
+                      {/* Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/20 via-transparent to-transparent"></div>
+                      
+                      {/* Image Badge */}
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-lg border border-[#123C73]/10">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-[#F4C430] rounded-xl flex items-center justify-center">
+                              <Users className="w-5 h-5 text-[#123C73]" />
+                            </div>
+                            <div>
+                              <p className="font-bold text-[#1B1F24] text-sm">Morning Assembly</p>
+                              <p className="text-xs text-[#667085]">Building Unity & Discipline</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-            {/* Text Content */}
-            <div className="space-y-8">
-              <Reveal delay={400} from="right">
-                <div className="prose prose-lg max-w-none">
+                    {/* Decorative Elements */}
+                    <div className="absolute -top-4 -right-4 w-20 h-20 bg-[#F4C430] rounded-2xl flex items-center justify-center shadow-xl rotate-12">
+                      <Sun className="w-10 h-10 text-[#123C73]" />
+                    </div>
+                  </div>
+                </Reveal>
+              </div>
+
+              {/* Text Content */}
+              <div className="space-y-8">
+                <Reveal delay={400} from="right">
                   <div className="space-y-6">
                     {displayData.content.map((item, index) => (
                       <Reveal key={item.id} delay={500 + index * 100} from="right">
-                        <p className="text-lg text-gray-700 leading-relaxed">
-                          {item.paragraph}
-                        </p>
+                        <div className="flex gap-4 group">
+                          {/* Step Number */}
+                          <div className="flex-shrink-0">
+                            <div className="w-10 h-10 bg-gradient-to-br from-[#F4C430]/10 to-[#123C73]/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                              <span className="text-[#123C73] font-bold">{index + 1}</span>
+                            </div>
+                          </div>
+                          
+                          {/* Content */}
+                          <p className="text-lg text-[#667085] leading-relaxed group-hover:text-[#1B1F24] transition-colors duration-300 flex-1">
+                            {item.paragraph}
+                          </p>
+                        </div>
                       </Reveal>
                     ))}
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        )}
-
-        {/* Assembly Features Section */}
-        {!loading && (
-          <Reveal delay={600}>
-            <div className="mt-20 pt-12 border-t border-gray-200">
-              <h3 className="text-3xl font-bold text-gray-900 text-center mb-12">
-                Assembly <span className="bg-gradient-to-r from-[#0D47A1] to-[#1565C0] bg-clip-text text-transparent">Highlights</span>
-              </h3>
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <Reveal delay={700} from="up">
-                  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                    <div className="w-12 h-12 bg-[#0D47A1]/10 rounded-lg flex items-center justify-center mb-4">
-                      <svg className="w-6 h-6 text-[#0D47A1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Prayer & Anthem</h4>
-                    <p className="text-gray-600">Daily prayers and national anthem to start the day with positivity</p>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={800} from="up">
-                  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                    <div className="w-12 h-12 bg-[#0D47A1]/10 rounded-lg flex items-center justify-center mb-4">
-                      <svg className="w-6 h-6 text-[#0D47A1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Thought of the Day</h4>
-                    <p className="text-gray-600">Inspiring thoughts and motivational messages shared by students</p>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={900} from="up">
-                  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                    <div className="w-12 h-12 bg-[#0D47A1]/10 rounded-lg flex items-center justify-center mb-4">
-                      <svg className="w-6 h-6 text-[#0D47A1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Announcements</h4>
-                    <p className="text-gray-600">Important updates, achievements, and upcoming events</p>
-                  </div>
-                </Reveal>
-
-                <Reveal delay={1000} from="up">
-                  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow duration-300 border border-gray-100">
-                    <div className="w-12 h-12 bg-[#0D47A1]/10 rounded-lg flex items-center justify-center mb-4">
-                      <svg className="w-6 h-6 text-[#0D47A1]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <h4 className="text-lg font-semibold text-gray-900 mb-2">Cultural Programs</h4>
-                    <p className="text-gray-600">Student performances showcasing talents and creativity</p>
                   </div>
                 </Reveal>
               </div>
             </div>
-          </Reveal>
+
+            {/* Assembly Highlights Section */}
+            <Reveal delay={600}>
+              <div className="relative">
+                {/* Section Divider */}
+                <div className="flex items-center justify-center gap-4 mb-12">
+                  <div className="h-px flex-1 bg-[#123C73]/10"></div>
+                  <div className="px-6 py-2 bg-[#123C73]/5 rounded-full border border-[#123C73]/10">
+                    <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                      Assembly Highlights
+                    </span>
+                  </div>
+                  <div className="h-px flex-1 bg-[#123C73]/10"></div>
+                </div>
+
+                <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1B1F24] text-center mb-12 lg:mb-16">
+                  What Makes Our{" "}
+                  <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
+                    Assembly Special
+                  </span>
+                </h3>
+
+                <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                  {highlights.map((highlight, index) => {
+                    const IconComponent = highlight.icon;
+                    return (
+                      <Reveal key={index} delay={700 + index * 100} from="up">
+                        <div className="group relative bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-[#123C73]/5 hover:border-[#F4C430]/20">
+                          {/* Top Gradient Line */}
+                          <div className="absolute top-0 left-4 right-4 h-1 bg-gradient-to-r from-[#123C73] to-[#F4C430] rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                          
+                          {/* Icon */}
+                          <div className="w-14 h-14 bg-gradient-to-br from-[#F4C430]/10 to-[#123C73]/10 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                            <IconComponent className="w-7 h-7 text-[#123C73]" />
+                          </div>
+                          
+                          {/* Content */}
+                          <h4 className="text-lg font-bold text-[#1B1F24] mb-3 group-hover:text-[#123C73] transition-colors duration-300">
+                            {highlight.title}
+                          </h4>
+                          <p className="text-[#667085] leading-relaxed text-sm">
+                            {highlight.description}
+                          </p>
+
+                          {/* Hover Arrow */}
+                          <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                            <div className="w-8 h-8 bg-[#F4C430] rounded-xl flex items-center justify-center">
+                              <svg className="w-4 h-4 text-[#123C73]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      </Reveal>
+                    );
+                  })}
+                </div>
+              </div>
+            </Reveal>
+          </>
         )}
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-3 h-3 bg-[#0D47A1] rounded-full animate-pulse"></div>
-      <div className="absolute top-32 right-20 w-2 h-2 bg-yellow-400 rounded-full animate-pulse" style={{animationDelay: '1s'}}></div>
-      <div className="absolute bottom-20 left-20 w-4 h-4 bg-[#0D47A1] rounded-full animate-pulse" style={{animationDelay: '2s'}}></div>
+      {/* Decorative Floating Elements */}
+      <div className="absolute top-20 left-10 w-3 h-3 bg-[#123C73] rounded-full animate-pulse opacity-20"></div>
+      <div className="absolute top-32 right-20 w-2 h-2 bg-[#F4C430] rounded-full animate-pulse opacity-30" style={{animationDelay: '1s'}}></div>
+      <div className="absolute bottom-20 left-20 w-4 h-4 bg-[#123C73] rounded-full animate-pulse opacity-20" style={{animationDelay: '2s'}}></div>
+      <div className="absolute top-1/2 right-10 w-3 h-3 bg-[#F4C430] rounded-full animate-pulse opacity-30" style={{animationDelay: '1.5s'}}></div>
     </div>
   );
 };
