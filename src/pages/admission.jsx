@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
 import toast, { Toaster } from 'react-hot-toast';
+import { Send, RotateCcw, User, Mail, Phone, MapPin, GraduationCap, Users, FileText } from 'lucide-react';
 
 // Simple Skeleton component
 const Skeleton = ({ height = "h-16", width = "w-full", className = "" }) => (
-  <div className={`${height} ${width} ${className} bg-gray-200 rounded-md animate-pulse`}></div>
+  <div className={`${height} ${width} ${className} bg-[#E8EDF5] rounded-xl animate-pulse`}></div>
 );
 
 // Input Skeleton
 const InputSkeleton = () => (
-  <div className="space-y-1">
-    <Skeleton height="h-16 sm:h-20" />
+  <div className="space-y-2">
+    <Skeleton height="h-14 sm:h-16" />
   </div>
 );
 
@@ -20,7 +21,7 @@ const TextareaSkeleton = ({ rows = 3 }) => (
 
 // Button Skeleton
 const ButtonSkeleton = () => (
-  <Skeleton height="h-12" width="w-full sm:w-auto" className="sm:w-32" />
+  <Skeleton height="h-12" width="w-full sm:w-auto" className="sm:w-40" />
 );
 
 export default function AdmissionForm() {
@@ -224,7 +225,6 @@ export default function AdmissionForm() {
     const { name, value } = e.target;
     let sanitizedValue = value;
 
-    // Apply appropriate sanitization based on field type
     switch (name) {
       case 'studentName':
       case 'fatherName':
@@ -255,7 +255,6 @@ export default function AdmissionForm() {
       [name]: sanitizedValue
     });
 
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors({
         ...errors,
@@ -292,11 +291,34 @@ export default function AdmissionForm() {
 
   const showPopupMessage = (type, title, message) => {
     if (type === 'success') {
-      toast.success(message);
+      toast.success(message, {
+        style: {
+          background: '#123C73',
+          color: '#FCFCFD',
+          borderRadius: '12px',
+        },
+        iconTheme: {
+          primary: '#F4C430',
+          secondary: '#123C73',
+        },
+      });
     } else if (type === 'error') {
-      toast.error(message);
+      toast.error(message, {
+        style: {
+          background: '#FCFCFD',
+          color: '#1B1F24',
+          borderRadius: '12px',
+          border: '1px solid #123C73',
+        },
+      });
     } else {
-      toast(message);
+      toast(message, {
+        style: {
+          background: '#F7F9FC',
+          color: '#1B1F24',
+          borderRadius: '12px',
+        },
+      });
     }
   };
 
@@ -322,7 +344,6 @@ export default function AdmissionForm() {
     showPopupMessage('info', 'Form Cleared', 'All form fields have been cleared successfully.');
   };
 
-  // Format date for Payload CMS (YYYY-MM-DD format)
   const formatDateForPayload = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -338,15 +359,12 @@ export default function AdmissionForm() {
     setIsSubmitting(true);
 
     try {
-      // Prepare data for API submission
       const submissionData = {
         ...formData,
         dateOfBirth: formatDateForPayload(formData.dateOfBirth),
-        // Convert age to number if it exists
         ageOn31stMarch: formData.ageOn31stMarch ? parseInt(formData.ageOn31stMarch) : undefined,
       };
 
-      // Remove empty fields to avoid validation issues
       Object.keys(submissionData).forEach(key => {
         if (submissionData[key] === '' || submissionData[key] === undefined) {
           delete submissionData[key];
@@ -387,9 +405,8 @@ export default function AdmissionForm() {
     }
   };
 
-  // Updated input classes with theme colors
-  const inputClasses = "w-full h-16 sm:h-20 px-4 border border-neutral rounded-md focus:outline-none focus:ring-2 focus:border-transparent placeholder-light-dark text-dark text-sm sm:text-base";
-  const errorInputClasses = "w-full h-16 sm:h-20 px-4 border border-red-300 rounded-md focus:outline-none focus:ring-2 focus:border-transparent placeholder-light-dark text-dark text-sm sm:text-base";
+  const inputClasses = "w-full h-14 sm:h-16 px-4 bg-[#FCFCFD] border-2 border-[#123C73]/10 rounded-2xl focus:outline-none focus:border-[#123C73] focus:ring-4 focus:ring-[#123C73]/5 placeholder-[#667085] text-[#1B1F24] text-sm sm:text-base transition-all duration-300";
+  const errorInputClasses = "w-full h-14 sm:h-16 px-4 bg-[#FCFCFD] border-2 border-red-300 rounded-2xl focus:outline-none focus:border-red-500 focus:ring-4 focus:ring-red-50 placeholder-[#667085] text-[#1B1F24] text-sm sm:text-base transition-all duration-300";
 
   const getInputClasses = (fieldName) => {
     return errors[fieldName] ? errorInputClasses : inputClasses;
@@ -397,70 +414,33 @@ export default function AdmissionForm() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-neutral py-4 sm:py-8 px-4">
-        <div className="max-w-7xl mx-auto bg-accent rounded-lg p-4 sm:p-8 shadow-sm">
-          {/* Header Skeleton */}
-          <div className="text-center mb-6 sm:mb-8">
-            <Skeleton height="h-8" width="w-80" className="mx-auto mb-2" />
-            <Skeleton height="h-4" width="w-64" className="mx-auto" />
-          </div>
-
-          <div className="space-y-4 sm:space-y-6">
-            {/* Student Information Row Skeleton */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <InputSkeleton />
-              <InputSkeleton />
-              <InputSkeleton />
+      <div className="min-h-screen bg-[#F7F9FC] py-8 sm:py-12 px-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-3xl shadow-xl border border-[#123C73]/5 p-6 sm:p-10">
+            {/* Header Skeleton */}
+            <div className="text-center mb-8 sm:mb-12">
+              <Skeleton height="h-10" width="w-96" className="mx-auto mb-3" />
+              <Skeleton height="h-5" width="w-72" className="mx-auto" />
             </div>
 
-            {/* Personal Details Row Skeleton */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <InputSkeleton />
-              <InputSkeleton />
-              <InputSkeleton />
-            </div>
-
-            {/* Address Row Skeleton */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <TextareaSkeleton />
-              <TextareaSkeleton />
-            </div>
-
-            {/* Contact Information Row Skeleton */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <InputSkeleton />
-              <InputSkeleton />
-              <InputSkeleton />
-            </div>
-
-            {/* Parent Information Skeleton - Balanced Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div className="space-y-4">
-                <Skeleton height="h-8" width="w-40" />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <InputSkeleton />
-                  <InputSkeleton />
+            <div className="space-y-6 sm:space-y-8">
+              {/* Section Title Skeletons */}
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="space-y-4">
+                  <Skeleton height="h-7" width="w-48" />
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    <InputSkeleton />
+                    <InputSkeleton />
+                    <InputSkeleton />
+                  </div>
                 </div>
-              </div>
-              <div className="space-y-4">
-                <Skeleton height="h-8" width="w-40" />
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <InputSkeleton />
-                  <InputSkeleton />
-                </div>
-              </div>
-            </div>
+              ))}
 
-            {/* Additional Information Skeleton */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <InputSkeleton />
-              <TextareaSkeleton rows={4} />
-            </div>
-
-            {/* Buttons Skeleton */}
-            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 pt-4 sm:pt-6">
-              <ButtonSkeleton />
-              <ButtonSkeleton />
+              {/* Buttons Skeleton */}
+              <div className="flex flex-col sm:flex-row justify-center gap-4 pt-8 border-t border-[#123C73]/10">
+                <ButtonSkeleton />
+                <ButtonSkeleton />
+              </div>
             </div>
           </div>
         </div>
@@ -469,301 +449,359 @@ export default function AdmissionForm() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral py-4 sm:py-8 px-4">
+    <div className="min-h-screen bg-[#F7F9FC] py-8 sm:py-12 px-4">
       <Toaster position="top-right" />
 
-      <div className="max-w-7xl mx-auto bg-accent rounded-lg p-4 sm:p-8 shadow-sm">
-        {/* Header */}
-        <div className="text-center mb-6 sm:mb-8">
-          <h1 className="text-xl sm:text-2xl font-bold text-primary">
-            ADMISSION REGISTRATION FORM
-          </h1>
-          <p className="text-light-dark text-xs sm:text-sm mt-2">We make your child happy day after day</p>
-        </div>
-
-        <div className="space-y-6 sm:space-y-8">
-          {/* Student Information */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-primary border-b pb-2">Student Information</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div>
-                <input
-                  type="text"
-                  name="studentName"
-                  placeholder="Name of the Student *"
-                  value={formData.studentName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={getInputClasses('studentName')}
-                  style={{ '--tw-ring-color': errors.studentName ? '#ef4444' : '#0D47A1' }}
-                  required
-                />
-                {errors.studentName && <p className="mt-1 text-sm text-red-600">{errors.studentName}</p>}
-              </div>
-              <div>
-                <select
-                  name="classAdmission"
-                  value={formData.classAdmission}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={getInputClasses('classAdmission')}
-                  style={{ '--tw-ring-color': errors.classAdmission ? '#ef4444' : '#0D47A1' }}
-                  required
-                >
-                  <option value="">Class to which admission is sought ({getCurrentAcademicYear()}) *</option>
-                  {classOptions.map((classOption, index) => (
-                    <option key={index} value={classOption}>
-                      {classOption}
-                    </option>
-                  ))}
-                </select>
-                {errors.classAdmission && <p className="mt-1 text-sm text-red-600">{errors.classAdmission}</p>}
-              </div>
-              <div>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={getInputClasses('gender')}
-                  style={{ '--tw-ring-color': errors.gender ? '#ef4444' : '#0D47A1' }}
-                  required
-                >
-                  <option value="">Select Gender *</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-                {errors.gender && <p className="mt-1 text-sm text-red-600">{errors.gender}</p>}
-              </div>
-            </div>
+      {/* Hero Banner */}
+      <div className="max-w-7xl mx-auto mb-8 sm:mb-12">
+        <div className="relative bg-gradient-to-br from-[#123C73] to-[#0A2348] rounded-3xl p-8 sm:p-12 overflow-hidden">
+          {/* Decorative Background */}
+          <div className="absolute inset-0">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#F4C430]/10 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
           </div>
 
-          {/* Personal Details */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-primary border-b pb-2">Personal Details</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div>
-                <input
-                  type="date"
-                  name="dateOfBirth"
-                  placeholder="Date of Birth *"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={getInputClasses('dateOfBirth')}
-                  style={{ '--tw-ring-color': errors.dateOfBirth ? '#ef4444' : '#0D47A1' }}
-                  required
-                />
-                {errors.dateOfBirth && <p className="mt-1 text-sm text-red-600">{errors.dateOfBirth}</p>}
-              </div>
-              <div>
-                <input
-                  type="number"
-                  name="ageOn31stMarch"
-                  placeholder={`Age on 31st March ${currentYear}`}
-                  min="1"
-                  max="25"
-                  value={formData.ageOn31stMarch}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={getInputClasses('ageOn31stMarch')}
-                  style={{ '--tw-ring-color': errors.ageOn31stMarch ? '#ef4444' : '#0D47A1' }}
-                />
-                {errors.ageOn31stMarch && <p className="mt-1 text-sm text-red-600">{errors.ageOn31stMarch}</p>}
-              </div>
-              <div>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="E-mail ID *"
-                  value={formData.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={getInputClasses('email')}
-                  style={{ '--tw-ring-color': errors.email ? '#ef4444' : '#0D47A1' }}
-                  required
-                />
-                {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
-              </div>
+          <div className="relative z-10 text-center">
+            <div className="inline-flex items-center px-5 py-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6">
+              <GraduationCap className="w-5 h-5 text-[#F4C430] mr-2" />
+              <span className="text-[#F4C430] font-semibold text-sm tracking-wider uppercase">
+                Admissions {getCurrentAcademicYear()}
+              </span>
             </div>
-          </div>
-
-          {/* Address Information */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-primary border-b pb-2">Address Information</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
-                <textarea
-                  name="presentAddress"
-                  placeholder="Present Address *"
-                  value={formData.presentAddress}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  rows={3}
-                  className={`w-full px-4 py-3 border ${errors.presentAddress ? 'border-red-300' : 'border-neutral'} rounded-md focus:outline-none focus:ring-2 focus:border-transparent placeholder-light-dark text-dark resize-none text-sm sm:text-base`}
-                  style={{ '--tw-ring-color': errors.presentAddress ? '#ef4444' : '#0D47A1' }}
-                />
-                {errors.presentAddress && <p className="mt-1 text-sm text-red-600">{errors.presentAddress}</p>}
-              </div>
-              <div>
-                <textarea
-                  name="permanentAddress"
-                  placeholder="Permanent Address (if different from present address)"
-                  value={formData.permanentAddress}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full px-4 py-3 border border-neutral rounded-md focus:outline-none focus:ring-2 focus:border-transparent placeholder-light-dark text-dark resize-none text-sm sm:text-base"
-                  style={{ '--tw-ring-color': '#0D47A1' }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Contact Information */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-primary border-b pb-2">Contact Information</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-2">
-                <input
-                  type="text"
-                  name="contactNo"
-                  placeholder="Contact Number *"
-                  value={formData.contactNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  className={getInputClasses('contactNo')}
-                  style={{ '--tw-ring-color': errors.contactNo ? '#ef4444' : '#0D47A1' }}
-                  required
-                />
-                {errors.contactNo && <p className="mt-1 text-sm text-red-600">{errors.contactNo}</p>}
-              </div>
-            </div>
-          </div>
-
-          {/* Parent Information - Balanced Layout */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-primary border-b pb-2">Parent Information</h2>
             
-            {/* Father's Information */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              <div className="space-y-4">
-                <h3 className="text-md font-medium text-dark">Father's Details</h3>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="fatherName"
-                      placeholder="Father's Name"
-                      value={formData.fatherName}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={getInputClasses('fatherName')}
-                      style={{ '--tw-ring-color': errors.fatherName ? '#ef4444' : '#0D47A1' }}
-                    />
-                    {errors.fatherName && <p className="mt-1 text-sm text-red-600">{errors.fatherName}</p>}
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      name="fatherOccupation"
-                      placeholder="Father's Occupation"
-                      value={formData.fatherOccupation}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={getInputClasses('fatherOccupation')}
-                      style={{ '--tw-ring-color': errors.fatherOccupation ? '#ef4444' : '#0D47A1' }}
-                    />
-                    {errors.fatherOccupation && <p className="mt-1 text-sm text-red-600">{errors.fatherOccupation}</p>}
-                  </div>
-                </div>
-              </div>
-
-              {/* Mother's Information */}
-              <div className="space-y-4">
-                <h3 className="text-md font-medium text-dark">Mother's Details</h3>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      type="text"
-                      name="motherName"
-                      placeholder="Mother's Name"
-                      value={formData.motherName}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={getInputClasses('motherName')}
-                      style={{ '--tw-ring-color': errors.motherName ? '#ef4444' : '#0D47A1' }}
-                    />
-                    {errors.motherName && <p className="mt-1 text-sm text-red-600">{errors.motherName}</p>}
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      name="motherOccupation"
-                      placeholder="Mother's Occupation"
-                      value={formData.motherOccupation}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={getInputClasses('motherOccupation')}
-                      style={{ '--tw-ring-color': errors.motherOccupation ? '#ef4444' : '#0D47A1' }}
-                    />
-                    {errors.motherOccupation && <p className="mt-1 text-sm text-red-600">{errors.motherOccupation}</p>}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Additional Information */}
-          <div className="space-y-4">
-            <h2 className="text-lg font-semibold text-primary border-b pb-2">Additional Information</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <div>
-                <input
-                  type="text"
-                  name="schoolPreviouslyAttended"
-                  placeholder="School previously attended"
-                  value={formData.schoolPreviouslyAttended}
-                  onChange={handleChange}
-                  className={inputClasses}
-                  style={{ '--tw-ring-color': '#0D47A1' }}
-                />
-              </div>
-              <div>
-                <textarea
-                  name="specialRequests"
-                  placeholder="Special requests if any"
-                  value={formData.specialRequests}
-                  onChange={handleChange}
-                  rows={4}
-                  className="w-full px-4 py-3 border border-neutral rounded-md focus:outline-none focus:ring-2 focus:border-transparent placeholder-light-dark text-dark resize-none text-sm sm:text-base"
-                  style={{ '--tw-ring-color': '#0D47A1' }}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Form Actions */}
-          <div className="pt-6 sm:pt-8 border-t border-neutral">
-            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
-              <button
-                onClick={handleClearForm}
-                className="w-full sm:w-auto px-6 sm:px-8 py-3 border-2 border-primary text-primary font-medium rounded-md transition duration-200 hover:bg-primary hover:text-accent text-sm sm:text-base"
-                disabled={isSubmitting}
-              >
-                Clear form
-              </button>
-              <button
-                onClick={handleSubmit}
-                disabled={isSubmitting}
-                className="w-full sm:w-auto px-6 sm:px-8 py-3 bg-secondary hover:bg-yellow-600 text-dark font-medium rounded-md transition duration-200 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? 'Submitting...' : 'Submit Application'}
-              </button>
-            </div>
-            <p className="text-center text-light-dark text-xs mt-4">
-              Fields marked with * are required
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+              Admission Registration Form
+            </h1>
+            <p className="text-lg text-white/80 font-light">
+              Begin your child's journey towards excellence
             </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Form Container */}
+      <div className="max-w-7xl mx-auto">
+        <div className="bg-white rounded-3xl shadow-xl border border-[#123C73]/5 p-6 sm:p-10">
+          <div className="space-y-8 sm:space-y-10">
+            {/* Student Information */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 pb-3 border-b-2 border-[#123C73]/10">
+                <div className="w-10 h-10 bg-[#123C73]/5 rounded-xl flex items-center justify-center">
+                  <User className="w-5 h-5 text-[#123C73]" />
+                </div>
+                <h2 className="text-xl font-bold text-[#1B1F24]">Student Information</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+                <div>
+                  <input
+                    type="text"
+                    name="studentName"
+                    placeholder="Name of the Student *"
+                    value={formData.studentName}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={getInputClasses('studentName')}
+                    required
+                  />
+                  {errors.studentName && <p className="mt-2 text-sm text-red-500 ml-2">{errors.studentName}</p>}
+                </div>
+                <div>
+                  <select
+                    name="classAdmission"
+                    value={formData.classAdmission}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={getInputClasses('classAdmission')}
+                    required
+                  >
+                    <option value="">Class for Admission *</option>
+                    {classOptions.map((classOption, index) => (
+                      <option key={index} value={classOption}>
+                        {classOption}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.classAdmission && <p className="mt-2 text-sm text-red-500 ml-2">{errors.classAdmission}</p>}
+                </div>
+                <div>
+                  <select
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={getInputClasses('gender')}
+                    required
+                  >
+                    <option value="">Select Gender *</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                  {errors.gender && <p className="mt-2 text-sm text-red-500 ml-2">{errors.gender}</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Personal Details */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 pb-3 border-b-2 border-[#123C73]/10">
+                <div className="w-10 h-10 bg-[#123C73]/5 rounded-xl flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-[#123C73]" />
+                </div>
+                <h2 className="text-xl font-bold text-[#1B1F24]">Personal Details</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+                <div>
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={getInputClasses('dateOfBirth')}
+                    required
+                  />
+                  {errors.dateOfBirth && <p className="mt-2 text-sm text-red-500 ml-2">{errors.dateOfBirth}</p>}
+                </div>
+                <div>
+                  <input
+                    type="number"
+                    name="ageOn31stMarch"
+                    placeholder={`Age on 31st March ${currentYear}`}
+                    min="1"
+                    max="25"
+                    value={formData.ageOn31stMarch}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={getInputClasses('ageOn31stMarch')}
+                  />
+                  {errors.ageOn31stMarch && <p className="mt-2 text-sm text-red-500 ml-2">{errors.ageOn31stMarch}</p>}
+                </div>
+                <div>
+                  <input
+                    type="email"
+                    name="email"
+                    placeholder="E-mail ID *"
+                    value={formData.email}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={getInputClasses('email')}
+                    required
+                  />
+                  {errors.email && <p className="mt-2 text-sm text-red-500 ml-2">{errors.email}</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Address Information */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 pb-3 border-b-2 border-[#123C73]/10">
+                <div className="w-10 h-10 bg-[#123C73]/5 rounded-xl flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-[#123C73]" />
+                </div>
+                <h2 className="text-xl font-bold text-[#1B1F24]">Address Information</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
+                <div>
+                  <textarea
+                    name="presentAddress"
+                    placeholder="Present Address *"
+                    value={formData.presentAddress}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    rows={3}
+                    className={`w-full px-4 py-3 bg-[#FCFCFD] border-2 ${errors.presentAddress ? 'border-red-300 focus:border-red-500 focus:ring-red-50' : 'border-[#123C73]/10 focus:border-[#123C73] focus:ring-[#123C73]/5'} rounded-2xl focus:outline-none focus:ring-4 placeholder-[#667085] text-[#1B1F24] resize-none text-sm sm:text-base transition-all duration-300`}
+                  />
+                  {errors.presentAddress && <p className="mt-2 text-sm text-red-500 ml-2">{errors.presentAddress}</p>}
+                </div>
+                <div>
+                  <textarea
+                    name="permanentAddress"
+                    placeholder="Permanent Address (if different)"
+                    value={formData.permanentAddress}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full px-4 py-3 bg-[#FCFCFD] border-2 border-[#123C73]/10 rounded-2xl focus:outline-none focus:border-[#123C73] focus:ring-4 focus:ring-[#123C73]/5 placeholder-[#667085] text-[#1B1F24] resize-none text-sm sm:text-base transition-all duration-300"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Information */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 pb-3 border-b-2 border-[#123C73]/10">
+                <div className="w-10 h-10 bg-[#123C73]/5 rounded-xl flex items-center justify-center">
+                  <Phone className="w-5 h-5 text-[#123C73]" />
+                </div>
+                <h2 className="text-xl font-bold text-[#1B1F24]">Contact Information</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+                <div className="lg:col-span-2">
+                  <input
+                    type="text"
+                    name="contactNo"
+                    placeholder="Contact Number *"
+                    value={formData.contactNo}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={getInputClasses('contactNo')}
+                    required
+                  />
+                  {errors.contactNo && <p className="mt-2 text-sm text-red-500 ml-2">{errors.contactNo}</p>}
+                </div>
+              </div>
+            </div>
+
+            {/* Parent Information */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 pb-3 border-b-2 border-[#123C73]/10">
+                <div className="w-10 h-10 bg-[#123C73]/5 rounded-xl flex items-center justify-center">
+                  <Users className="w-5 h-5 text-[#123C73]" />
+                </div>
+                <h2 className="text-xl font-bold text-[#1B1F24]">Parent Information</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                {/* Father's Details */}
+                <div className="bg-[#F7F9FC] rounded-2xl p-5 sm:p-6 space-y-4">
+                  <h3 className="font-semibold text-[#123C73] flex items-center gap-2">
+                    <div className="w-2 h-2 bg-[#F4C430] rounded-full"></div>
+                    Father's Details
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        type="text"
+                        name="fatherName"
+                        placeholder="Father's Name"
+                        value={formData.fatherName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getInputClasses('fatherName')}
+                      />
+                      {errors.fatherName && <p className="mt-2 text-sm text-red-500 ml-2">{errors.fatherName}</p>}
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        name="fatherOccupation"
+                        placeholder="Father's Occupation"
+                        value={formData.fatherOccupation}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getInputClasses('fatherOccupation')}
+                      />
+                      {errors.fatherOccupation && <p className="mt-2 text-sm text-red-500 ml-2">{errors.fatherOccupation}</p>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mother's Details */}
+                <div className="bg-[#F7F9FC] rounded-2xl p-5 sm:p-6 space-y-4">
+                  <h3 className="font-semibold text-[#123C73] flex items-center gap-2">
+                    <div className="w-2 h-2 bg-[#F4C430] rounded-full"></div>
+                    Mother's Details
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        type="text"
+                        name="motherName"
+                        placeholder="Mother's Name"
+                        value={formData.motherName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getInputClasses('motherName')}
+                      />
+                      {errors.motherName && <p className="mt-2 text-sm text-red-500 ml-2">{errors.motherName}</p>}
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        name="motherOccupation"
+                        placeholder="Mother's Occupation"
+                        value={formData.motherOccupation}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={getInputClasses('motherOccupation')}
+                      />
+                      {errors.motherOccupation && <p className="mt-2 text-sm text-red-500 ml-2">{errors.motherOccupation}</p>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Additional Information */}
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 pb-3 border-b-2 border-[#123C73]/10">
+                <div className="w-10 h-10 bg-[#123C73]/5 rounded-xl flex items-center justify-center">
+                  <FileText className="w-5 h-5 text-[#123C73]" />
+                </div>
+                <h2 className="text-xl font-bold text-[#1B1F24]">Additional Information</h2>
+              </div>
+              
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-5">
+                <div>
+                  <input
+                    type="text"
+                    name="schoolPreviouslyAttended"
+                    placeholder="School previously attended"
+                    value={formData.schoolPreviouslyAttended}
+                    onChange={handleChange}
+                    className="w-full h-14 sm:h-16 px-4 bg-[#FCFCFD] border-2 border-[#123C73]/10 rounded-2xl focus:outline-none focus:border-[#123C73] focus:ring-4 focus:ring-[#123C73]/5 placeholder-[#667085] text-[#1B1F24] text-sm sm:text-base transition-all duration-300"
+                  />
+                </div>
+                <div>
+                  <textarea
+                    name="specialRequests"
+                    placeholder="Special requests if any"
+                    value={formData.specialRequests}
+                    onChange={handleChange}
+                    rows={4}
+                    className="w-full px-4 py-3 bg-[#FCFCFD] border-2 border-[#123C73]/10 rounded-2xl focus:outline-none focus:border-[#123C73] focus:ring-4 focus:ring-[#123C73]/5 placeholder-[#667085] text-[#1B1F24] resize-none text-sm sm:text-base transition-all duration-300"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Form Actions */}
+            <div className="pt-8 border-t-2 border-[#123C73]/10">
+              <div className="flex flex-col sm:flex-row justify-center gap-4">
+                <button
+                  onClick={handleClearForm}
+                  className="group w-full sm:w-auto px-8 py-4 border-2 border-[#123C73] text-[#123C73] font-semibold rounded-2xl hover:bg-[#123C73] hover:text-white transition-all duration-300 hover:shadow-lg flex items-center justify-center gap-2 text-sm sm:text-base"
+                  disabled={isSubmitting}
+                >
+                  <RotateCcw className="w-4 h-4 group-hover:rotate-180 transition-transform duration-500" />
+                  Clear Form
+                </button>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="group w-full sm:w-auto px-8 py-4 bg-[#F4C430] hover:bg-[#FFD95A] text-[#123C73] font-bold rounded-2xl transition-all duration-300 hover:shadow-xl hover:shadow-[#F4C430]/20 hover:-translate-y-1 flex items-center justify-center gap-2 text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-[#123C73] border-t-transparent rounded-full animate-spin"></div>
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                      Submit Application
+                    </>
+                  )}
+                </button>
+              </div>
+              <p className="text-center text-[#667085] text-sm mt-6">
+                Fields marked with <span className="text-[#123C73] font-semibold">*</span> are required
+              </p>
+            </div>
           </div>
         </div>
       </div>
