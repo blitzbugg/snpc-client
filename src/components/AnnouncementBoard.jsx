@@ -69,7 +69,7 @@ export default function AnnouncementBoard() {
         isExpanded ? "" : "cursor-pointer hover:shadow-2xl hover:shadow-[#123C73]/10"
       }`}
       style={{
-        width: "300px",
+        width: "min(300px, 100%)",
         height: isExpanded ? "400px" : "52px",
       }}
       onClick={!isExpanded ? () => setIsExpanded(true) : undefined}
