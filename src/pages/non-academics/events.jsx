@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Calendar, Filter, Sparkles, ArrowRight, Camera, Video, Facebook, ExternalLink } from 'lucide-react';
 
 // Scroll-reveal component
 function Reveal({
@@ -36,17 +37,17 @@ function Reveal({
 
   const hiddenTransform =
     from === "left"
-      ? "-translate-x-6"
+      ? "-translate-x-8"
       : from === "right"
-      ? "translate-x-6"
+      ? "translate-x-8"
       : from === "down"
-      ? "-translate-y-6"
-      : "translate-y-6";
+      ? "-translate-y-8"
+      : "translate-y-8";
 
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out will-change-transform ${
+      className={`transition-all duration-700 ease-out ${
         isVisible
           ? "opacity-100 translate-x-0 translate-y-0"
           : `opacity-0 ${hiddenTransform}`
@@ -74,7 +75,6 @@ const EventsPage = () => {
 
         const docs = result?.docs || [];
 
-        // Map docs to the UI-friendly shape used by this page
         const events = docs.map((ev) => ({
           id: ev.id ?? ev._id ?? String(Math.random()).slice(2),
           title: ev.title,
@@ -88,7 +88,6 @@ const EventsPage = () => {
           videoCount: ev.videoCount || 0,
         }));
 
-        // compute years and categories from events
         const yearsSet = new Set(events.map((e) => e.year).filter(Boolean));
         const years = Array.from(yearsSet).sort((a, b) => Number(b) - Number(a));
 
@@ -111,7 +110,6 @@ const EventsPage = () => {
         };
 
         setData(dataObj);
-        // set default selected year to the most recent if available
         if (years.length) setSelectedYear(years[0]);
         setLoading(false);
       } catch (err) {
@@ -129,65 +127,77 @@ const EventsPage = () => {
       event.year === selectedYear
   );
 
+  // Facebook page URL
+  const facebookPageUrl = "https://www.facebook.com/p/S-N-Public-School-Kizhavoor-Mukhathala-100067848552245/";
+
   return (
-  <div className="relative bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-16 lg:py-24 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600 rounded-full translate-x-1/3 -translate-y-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500 rounded-full -translate-x-1/2 translate-y-1/2"></div>
-        <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-sky-400 rounded-full"></div>
+    <div className="relative bg-gradient-to-br from-[#F7F9FC] via-white to-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-80 h-80 bg-[#123C73]/3 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#F4C430]/3 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#123C73]/2 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 lg:mb-20">
           {loading ? (
             <>
-              <Skeleton height={8} width={120} className="mx-auto mb-6 rounded-full" baseColor="#f3f4f6" highlightColor="#e5e7eb" />
-              <Skeleton height={48} width={400} className="mx-auto mb-6" baseColor="#f3f4f6" highlightColor="#e5e7eb" />
-              <Skeleton height={24} width={600} className="mx-auto" baseColor="#f3f4f6" highlightColor="#e5e7eb" count={2} />
+              <div className="flex justify-center mb-6">
+                <Skeleton height={40} width={160} className="rounded-full" baseColor="#E8EDF5" highlightColor="#F7F9FC" />
+              </div>
+              <Skeleton height={56} width={500} className="mx-auto mb-6" baseColor="#E8EDF5" highlightColor="#F7F9FC" />
+              <Skeleton height={24} width={600} className="mx-auto" baseColor="#E8EDF5" highlightColor="#F7F9FC" count={2} />
             </>
           ) : error ? (
             <div className="text-center">
-              <div className="inline-flex items-center px-4 py-2 bg-red-100 rounded-full border border-red-200 mb-6">
-                <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                <span className="text-red-600 font-semibold text-sm tracking-wide">ERROR</span>
+              <div className="inline-flex items-center px-5 py-2.5 bg-red-50 rounded-full border border-red-200 mb-6">
+                <Sparkles className="w-4 h-4 text-red-500 mr-2" />
+                <span className="text-red-600 font-semibold text-sm tracking-wider uppercase">Error</span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Unable to Load Content</h2>
-              <p className="text-lg text-red-600">{error}</p>
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#1B1F24] mb-6">Unable to Load Content</h2>
+              <p className="text-lg text-red-500">{error}</p>
             </div>
           ) : (
             <>
               <Reveal>
-                <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-full border border-blue-300 mb-6">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mr-2 animate-pulse"></div>
-                  <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent font-semibold text-sm tracking-wide">
-                    EVENT GALLERY
+                <div className="inline-flex items-center px-5 py-2.5 bg-[#123C73]/5 rounded-full border border-[#123C73]/10 mb-6">
+                  <Calendar className="w-4 h-4 text-[#F4C430] mr-2" />
+                  <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                    Event Gallery
                   </span>
                 </div>
               </Reveal>
 
               <Reveal delay={100}>
-                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#1B1F24] mb-6 leading-tight">
                   School{" "}
-                  <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
                     Events
                   </span>
                 </h1>
               </Reveal>
 
               <Reveal delay={200}>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                <p className="text-lg md:text-xl text-[#667085] max-w-3xl mx-auto leading-relaxed font-light">
                   {data?.subtitle}
                 </p>
               </Reveal>
+
+              {/* Decorative Divider */}
+              <div className="flex items-center justify-center gap-4 mt-8">
+                <div className="h-px w-12 bg-[#F4C430]/30"></div>
+                <Filter className="w-5 h-5 text-[#F4C430]" />
+                <div className="h-px w-12 bg-[#F4C430]/30"></div>
+              </div>
             </>
           )}
         </div>
 
         {/* Year and Category Filters */}
         {!loading && !error && (
-          <div className="mb-12">
+          <div className="mb-10 lg:mb-14">
             {/* Year Selector */}
             <Reveal delay={300}>
               <div className="flex justify-center gap-3 mb-6">
@@ -195,10 +205,10 @@ const EventsPage = () => {
                   <button
                     key={year}
                     onClick={() => setSelectedYear(year)}
-                    className={`px-6 py-2 rounded-full font-bold transition-all duration-300 ${
+                    className={`px-6 py-3 rounded-2xl font-bold transition-all duration-300 ${
                       selectedYear === year
-                        ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg scale-105"
-                        : "bg-white text-gray-700 hover:bg-blue-50 shadow-md hover:shadow-lg"
+                        ? "bg-[#123C73] text-white shadow-xl shadow-[#123C73]/20 scale-105"
+                        : "bg-white text-[#667085] hover:bg-[#F7F9FC] shadow-md border border-[#123C73]/5"
                     }`}
                   >
                     {year}
@@ -214,10 +224,10 @@ const EventsPage = () => {
                   <button
                     key={category.id}
                     onClick={() => setSelectedCategory(category.id)}
-                    className={`px-5 py-2 rounded-full font-semibold text-sm transition-all duration-300 ${
+                    className={`px-5 py-2.5 rounded-2xl font-semibold text-sm transition-all duration-300 ${
                       selectedCategory === category.id
-                        ? "bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-lg scale-105"
-                        : "bg-white text-gray-700 hover:bg-blue-50 shadow-md hover:shadow-lg"
+                        ? "bg-[#123C73] text-white shadow-lg scale-105"
+                        : "bg-white text-[#667085] hover:bg-[#F7F9FC] shadow-md border border-[#123C73]/5"
                     }`}
                   >
                     <span className="mr-2">{category.icon}</span>
@@ -231,82 +241,87 @@ const EventsPage = () => {
 
         {/* Events Grid */}
         {!loading && !error && filteredEvents && (
-          <div className="mb-20">
+          <div className="mb-16 lg:mb-24">
             {filteredEvents.length === 0 ? (
               <Reveal delay={500}>
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">📅</div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">No Events Found</h3>
-                  <p className="text-gray-600">Try selecting a different category or year</p>
+                <div className="text-center py-16">
+                  <div className="w-24 h-24 bg-[#123C73]/5 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                    <Calendar className="w-12 h-12 text-[#667085]/30" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-[#1B1F24] mb-2">No Events Found</h3>
+                  <p className="text-[#667085]">Try selecting a different category or year</p>
                 </div>
               </Reveal>
             ) : (
               <>
                 <Reveal delay={500}>
-                  <div className="text-center mb-8">
-                    <p className="text-lg text-gray-600">
-                      Showing <span className="font-bold text-blue-600">{filteredEvents.length}</span> events
-                    </p>
+                  <div className="text-center mb-10">
+                    <div className="inline-flex items-center px-5 py-2.5 bg-[#123C73]/5 rounded-full border border-[#123C73]/10">
+                      <span className="text-[#667085] text-sm">
+                        Showing <span className="font-bold text-[#123C73]">{filteredEvents.length}</span> events
+                      </span>
+                    </div>
                   </div>
                 </Reveal>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                   {filteredEvents.map((event, index) => (
                     <Reveal key={event.id} delay={600 + index * 50}>
-                      <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 group cursor-pointer">
+                      <div className="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-[#123C73]/5 hover:border-[#F4C430]/20 transform hover:-translate-y-2">
+                        {/* Image Section */}
                         <div className="relative h-56 overflow-hidden">
                           <img
                             src={event.coverImage}
                             alt={event.title}
                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/70 via-[#123C73]/20 to-transparent"></div>
                           
                           {/* Category Badge */}
-                          <div className="absolute top-4 right-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
-                            {event.category.charAt(0).toUpperCase() + event.category.slice(1)}
+                          <div className="absolute top-4 right-4">
+                            <div className="bg-[#F4C430] text-[#123C73] px-4 py-1.5 rounded-xl text-xs font-bold shadow-lg">
+                              {event.category.charAt(0).toUpperCase() + event.category.slice(1)}
+                            </div>
                           </div>
 
-                          {/* Media Count */}
-                          {/* <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 flex items-center gap-1">
-                                📸 {event.photoCount}
+                          {/* Media Count Badges */}
+                          <div className="absolute bottom-4 left-4 flex items-center gap-2">
+                            {event.photoCount > 0 && (
+                              <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-xs font-bold text-[#123C73] flex items-center gap-1">
+                                <Camera className="w-3 h-3" />
+                                {event.photoCount}
                               </span>
-                              {event.videoCount > 0 && (
-                                <span className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-bold text-gray-900 flex items-center gap-1">
-                                  🎥 {event.videoCount}
-                                </span>
-                              )}
-                            </div>
-                          </div> */}
+                            )}
+                            {event.videoCount > 0 && (
+                              <span className="bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-xl text-xs font-bold text-[#123C73] flex items-center gap-1">
+                                <Video className="w-3 h-3" />
+                                {event.videoCount}
+                              </span>
+                            )}
+                          </div>
                         </div>
 
+                        {/* Content Section */}
                         <div className="p-6">
-                          <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                            <span className="text-purple-600">📅</span>
+                          <div className="flex items-center gap-2 text-sm text-[#667085] mb-3">
+                            <Calendar className="w-4 h-4 text-[#123C73]" />
                             <span className="font-semibold">{event.date}</span>
                           </div>
                           
-                          <h4 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                          <h4 className="text-xl font-bold text-[#1B1F24] mb-3 group-hover:text-[#123C73] transition-colors duration-300">
                             {event.title}
                           </h4>
                           
-                          <p className="text-sm text-gray-600 leading-relaxed mb-4">
-                            {event.description?.split('\n').map((line, i, arr) => (
-                              <React.Fragment key={i}>
-                                {line}
-                                {i < arr.length - 1 && <br />}
-                              </React.Fragment>
-                            ))}
+                          <p className="text-sm text-[#667085] leading-relaxed line-clamp-3">
+                            {event.description}
                           </p>
 
-                          {/* <button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
-                            <span>View Gallery</span>
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </button> */}
+                          {/* Bottom Accent */}
+                          <div className="mt-4 flex items-center gap-2">
+                            <div className="h-px flex-1 bg-[#123C73]/10"></div>
+                            <div className="w-2 h-2 bg-[#F4C430] rounded-full rotate-45"></div>
+                            <div className="h-px flex-1 bg-[#123C73]/10"></div>
+                          </div>
                         </div>
                       </div>
                     </Reveal>
@@ -317,33 +332,51 @@ const EventsPage = () => {
           </div>
         )}
 
-        {/* Call to Action */}
-        <Reveal delay={1000}>
-          <div className="bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-600 rounded-2xl p-8 lg:p-12 shadow-2xl text-center">
-            <h3 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-              Stay Updated with Our Events
-            </h3>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Follow us on social media and subscribe to our newsletter for the latest updates on school events and activities
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-blue-600 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300">
-                Subscribe to Newsletter
-              </button>
-              <button className="bg-blue-700 text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-800 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 duration-300">
-                Follow on Social Media
-              </button>
+        {/* Call to Action - Facebook */}
+        {!loading && !error && (
+          <Reveal delay={1000}>
+            <div className="relative bg-gradient-to-br from-[#123C73] to-[#0A2348] rounded-3xl p-8 lg:p-12 shadow-2xl shadow-[#123C73]/20 overflow-hidden">
+              {/* Decorative Background */}
+              <div className="absolute inset-0">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[#F4C430]/10 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+              </div>
+
+              <div className="relative z-10">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-[#1877F2] rounded-2xl mb-6">
+                    <Facebook className="w-8 h-8 text-white" />
+                  </div>
+                  
+                  <h3 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+                    Follow Us on Facebook
+                  </h3>
+                  <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+                    Stay updated with our latest events, activities, and school news by following our official Facebook page
+                  </p>
+                  
+                  <a
+                    href={facebookPageUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-3 bg-[#1877F2] text-white font-bold px-8 py-4 rounded-2xl hover:bg-[#166fe5] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                  >
+                    <Facebook className="w-5 h-5" />
+                    Visit Our Facebook Page
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        )}
       </div>
 
-      {/* Decorative Elements */}
-  <div className="absolute top-20 left-10 w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
-  <div className="absolute top-32 right-20 w-2 h-2 bg-cyan-500 rounded-full animate-pulse" style={{ animationDelay: "1s" }}></div>
-  <div className="absolute bottom-20 left-20 w-4 h-4 bg-sky-400 rounded-full animate-pulse" style={{ animationDelay: "2s" }}></div>
-  <div className="absolute bottom-40 right-32 w-3 h-3 bg-blue-600 rounded-full animate-pulse" style={{ animationDelay: "1.5s" }}></div>
-  <div className="absolute top-1/2 left-32 w-2 h-2 bg-cyan-500 rounded-full animate-pulse" style={{ animationDelay: "0.5s" }}></div>
+      {/* Decorative Floating Elements */}
+      <div className="absolute top-20 left-10 w-3 h-3 bg-[#123C73] rounded-full animate-pulse opacity-20"></div>
+      <div className="absolute top-32 right-20 w-2 h-2 bg-[#F4C430] rounded-full animate-pulse opacity-30" style={{ animationDelay: "1s" }}></div>
+      <div className="absolute bottom-20 left-20 w-4 h-4 bg-[#123C73] rounded-full animate-pulse opacity-20" style={{ animationDelay: "2s" }}></div>
+      <div className="absolute bottom-40 right-32 w-3 h-3 bg-[#F4C430] rounded-full animate-pulse opacity-30" style={{ animationDelay: "1.5s" }}></div>
     </div>
   );
 };
