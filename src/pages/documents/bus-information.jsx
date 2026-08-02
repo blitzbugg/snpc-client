@@ -1,5 +1,6 @@
 // src/pages/BusTablesPage.jsx
 import React, { useState } from "react";
+import { Bus, Clock, MapPin, ChevronLeft, ChevronRight, ArrowUp, Navigation, Sparkles } from "lucide-react";
 
 // Data fetching happens here (server-side)
 export async function getServerSideProps() {
@@ -16,7 +17,6 @@ export async function getServerSideProps() {
       };
     }
 
-    // Fetch first page initially
     const res = await fetch(`${cmsUrl}/api/bus-tables?page=1&limit=10`, {
       cache: "no-store",
     });
@@ -43,7 +43,6 @@ export async function getServerSideProps() {
   }
 }
 
-// Component with client-side pagination
 export default function BusTablesPage({ initialData, error }) {
   const [data, setData] = useState(initialData);
   const [currentPage, setCurrentPage] = useState(initialData.page || 1);
@@ -52,7 +51,6 @@ export default function BusTablesPage({ initialData, error }) {
   const currentDate = new Date();
   const currentYear = currentDate.getFullYear();
 
-  // Fetch data for a specific page
   const fetchPage = async (pageNum) => {
     setLoading(true);
     try {
@@ -67,7 +65,6 @@ export default function BusTablesPage({ initialData, error }) {
       setData(newData);
       setCurrentPage(pageNum);
       
-      // Scroll to top of page smoothly
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       console.error("Error fetching page:", err);
@@ -76,40 +73,33 @@ export default function BusTablesPage({ initialData, error }) {
     }
   };
 
-  // Handle page navigation
   const goToPage = (pageNum) => {
     if (pageNum >= 1 && pageNum <= data.totalPages && pageNum !== currentPage) {
       fetchPage(pageNum);
     }
   };
 
-  // Generate page numbers to display
   const getPageNumbers = () => {
     const pages = [];
     const totalPages = data.totalPages || 1;
     const current = currentPage;
     
-    // Always show first page
     pages.push(1);
     
-    // Show ellipsis if needed
     if (current > 3) {
       pages.push('...');
     }
     
-    // Show pages around current page
     for (let i = Math.max(2, current - 1); i <= Math.min(totalPages - 1, current + 1); i++) {
       if (!pages.includes(i)) {
         pages.push(i);
       }
     }
     
-    // Show ellipsis if needed
     if (current < totalPages - 2) {
       pages.push('...');
     }
     
-    // Always show last page if there are multiple pages
     if (totalPages > 1 && !pages.includes(totalPages)) {
       pages.push(totalPages);
     }
@@ -117,9 +107,7 @@ export default function BusTablesPage({ initialData, error }) {
     return pages;
   };
 
-  // Sort buses by number extracted from title
   const sortedBuses = [...(data.docs || [])].sort((a, b) => {
-    // Extract numbers from bus titles for proper numerical sorting
     const getNumberFromTitle = (title) => {
       const match = title.match(/(\d+)/);
       return match ? parseInt(match[1], 10) : 0;
@@ -128,24 +116,24 @@ export default function BusTablesPage({ initialData, error }) {
     const numA = getNumberFromTitle(a.title);
     const numB = getNumberFromTitle(b.title);
     
-    // If both have numbers, sort numerically
     if (numA && numB) {
       return numA - numB;
     }
     
-    // Otherwise, sort alphabetically
     return a.title.localeCompare(b.title);
   });
 
-  // Handle case where no data is available
   if (!data.docs || data.docs.length === 0) {
     return (
-      <div className="bg-neutral min-h-screen p-8 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-primary mb-4">
+      <div className="bg-[#F7F9FC] min-h-screen py-16 lg:py-24 px-4 flex items-center justify-center">
+        <div className="text-center max-w-lg">
+          <div className="w-24 h-24 bg-[#123C73]/5 rounded-3xl flex items-center justify-center mx-auto mb-6">
+            <Bus className="w-12 h-12 text-[#667085]/30" />
+          </div>
+          <h1 className="text-3xl md:text-5xl font-bold text-[#1B1F24] mb-4">
             School Bus Timetables {currentYear}
           </h1>
-          <p className="text-dark text-lg">
+          <p className="text-[#667085] text-lg">
             {error ? `Error: ${error}` : "Bus schedules are currently unavailable. Please try again later."}
           </p>
         </div>
@@ -154,131 +142,197 @@ export default function BusTablesPage({ initialData, error }) {
   }
 
   return (
-    <div className="bg-neutral min-h-screen p-8">
-      <h1 className="text-4xl font-bold text-primary mb-10 text-center">
-        School Bus Timetables {currentYear}
-      </h1>
-
-      {/* Loading indicator */}
-      {loading && (
-        <div className="fixed top-4 right-4 bg-primary text-accent px-4 py-2 rounded-lg shadow-lg z-50">
-          Loading...
-        </div>
-      )}
-
-      {/* Bus tables */}
-      <div className="space-y-16">
-        {sortedBuses.map((bus) => (
-          <div
-            key={bus.id}
-            className="bg-accent rounded-2xl shadow-md border border-off-white overflow-hidden"
-          >
-            {/* Header */}
-            <div className="bg-primary-dark text-accent p-4 flex justify-between items-center">
-              <div>
-                <h2 className="text-2xl font-semibold">{bus.title}</h2>
-                {bus.routeDescription && (
-                  <p className="text-sm text-secondary mt-1">{bus.routeDescription}</p>
-                )}
-              </div>
-              <span className="text-secondary font-bold text-3xl">🚌</span>
-            </div>
-
-            {/* Table */}
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-dark">
-                <thead>
-                  <tr className="bg-primary text-accent text-left">
-                    <th className="p-3 border border-off-white">STOP</th>
-                    <th className="p-3 border border-off-white">MORNING</th>
-                    <th className="p-3 border border-off-white">EVENING</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {bus.stops?.map((stop, i) => (
-                    <tr
-                      key={stop.id || i}
-                      className={
-                        i % 2 === 0
-                          ? "bg-off-white hover:bg-secondary/20 transition"
-                          : "bg-accent hover:bg-secondary/20 transition"
-                      }
-                    >
-                      <td className="p-3 border border-neutral font-medium">{stop.stop}</td>
-                      <td className="p-3 border border-neutral">{stop.morning || "-"}</td>
-                      <td className="p-3 border border-neutral">{stop.evening || "-"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Pagination Controls */}
-      {data.totalPages > 1 && (
-        <div className="mt-16 flex justify-center items-center gap-2">
-          {/* Previous button */}
-          <button
-            onClick={() => goToPage(currentPage - 1)}
-            disabled={!data.hasPrevPage || loading}
-            className={`px-4 py-2 rounded-lg font-semibold transition ${
-              data.hasPrevPage && !loading
-                ? 'bg-primary text-accent hover:bg-primary-dark'
-                : 'bg-neutral text-dark cursor-not-allowed opacity-50'
-            }`}
-          >
-            Previous
-          </button>
-
-          {/* Page numbers */}
-          <div className="flex gap-2">
-            {getPageNumbers().map((pageNum, index) => (
-              pageNum === '...' ? (
-                <span key={`ellipsis-${index}`} className="px-3 py-2 text-dark">
-                  ...
-                </span>
-              ) : (
-                <button
-                  key={pageNum}
-                  onClick={() => goToPage(pageNum)}
-                  disabled={loading}
-                  className={`px-4 py-2 rounded-lg font-semibold transition ${
-                    currentPage === pageNum
-                      ? 'bg-primary-dark text-accent'
-                      : 'bg-accent text-primary border border-primary hover:bg-primary hover:text-accent'
-                  }`}
-                >
-                  {pageNum}
-                </button>
-              )
-            ))}
+    <div className="bg-[#F7F9FC] min-h-screen py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header Section */}
+        <div className="text-center mb-12 lg:mb-16">
+          <div className="inline-flex items-center px-5 py-2.5 bg-[#123C73]/5 rounded-full border border-[#123C73]/10 mb-6">
+            <Bus className="w-4 h-4 text-[#F4C430] mr-2" />
+            <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">Transport</span>
           </div>
 
-          {/* Next button */}
-          <button
-            onClick={() => goToPage(currentPage + 1)}
-            disabled={!data.hasNextPage || loading}
-            className={`px-4 py-2 rounded-lg font-semibold transition ${
-              data.hasNextPage && !loading
-                ? 'bg-primary text-accent hover:bg-primary-dark'
-                : 'bg-neutral text-dark cursor-not-allowed opacity-50'
-            }`}
-          >
-            Next
-          </button>
-        </div>
-      )}
-
-      {/* Page info */}
-      {data.totalPages > 1 && (
-        <div className="mt-6 text-center text-dark">
-          <p className="text-sm">
-            Page {currentPage} of {data.totalPages} • Showing {data.docs.length} of {data.totalDocs} bus routes
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#1B1F24] mb-6 leading-tight">
+            School Bus{" "}
+            <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">Timetables</span>
+            {" "}{currentYear}
+          </h1>
+          
+          <p className="text-lg md:text-xl text-[#667085] max-w-2xl mx-auto leading-relaxed font-light">
+            Find your bus route, pickup points, and timings for safe school transportation
           </p>
+
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <div className="h-px w-12 bg-[#F4C430]/30"></div>
+            <Navigation className="w-5 h-5 text-[#F4C430]" />
+            <div className="h-px w-12 bg-[#F4C430]/30"></div>
+          </div>
         </div>
-      )}
+
+        {/* Loading indicator */}
+        {loading && (
+          <div className="fixed top-4 right-4 bg-[#123C73] text-white px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-2 animate-pulse">
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            Loading...
+          </div>
+        )}
+
+        {/* Bus tables */}
+        <div className="space-y-10 lg:space-y-14">
+          {sortedBuses.map((bus) => (
+            <div
+              key={bus.id}
+              className="bg-white rounded-3xl shadow-xl border border-[#123C73]/5 overflow-hidden"
+            >
+              {/* Header */}
+              <div className="relative bg-gradient-to-br from-[#123C73] to-[#0A2348] p-6 lg:p-8 overflow-hidden">
+                <div className="absolute inset-0">
+                  <div className="absolute top-0 right-0 w-48 h-48 bg-[#F4C430]/10 rounded-full blur-3xl"></div>
+                  <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+                </div>
+                
+                <div className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 bg-[#F4C430] rounded-2xl flex items-center justify-center flex-shrink-0">
+                      <Bus className="w-7 h-7 text-[#123C73]" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl lg:text-3xl font-bold text-white">{bus.title}</h2>
+                      {bus.routeDescription && (
+                        <div className="flex items-center gap-2 mt-2 text-white/70">
+                          <MapPin className="w-4 h-4 text-[#F4C430]" />
+                          <p className="text-sm">{bus.routeDescription}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <span className="text-4xl hidden sm:block">🚌</span>
+                </div>
+              </div>
+
+              {/* Table */}
+              <div className="overflow-x-auto p-4 lg:p-6">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="bg-[#F7F9FC]">
+                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tl-xl flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-[#F4C430]" />
+                        Stop
+                      </th>
+                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-[#F4C430]" />
+                        Morning
+                      </th>
+                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tr-xl flex items-center gap-2">
+                        <Clock className="w-4 h-4 text-[#F4C430]" />
+                        Evening
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {bus.stops?.map((stop, i) => (
+                      <tr
+                        key={stop.id || i}
+                        className={`transition-all duration-200 ${
+                          i % 2 === 0
+                            ? "bg-white hover:bg-[#F7F9FC]"
+                            : "bg-[#FCFCFD] hover:bg-[#F7F9FC]"
+                        }`}
+                      >
+                        <td className="p-4 border-b border-[#123C73]/5 font-medium text-[#1B1F24]">
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 bg-[#123C73]/5 rounded-lg flex items-center justify-center text-xs font-bold text-[#123C73]">
+                              {i + 1}
+                            </span>
+                            {stop.stop}
+                          </div>
+                        </td>
+                        <td className="p-4 border-b border-[#123C73]/5 text-[#667085]">
+                          <span className="bg-[#F4C430]/10 text-[#123C73] px-3 py-1 rounded-lg text-sm font-semibold">
+                            {stop.morning || "-"}
+                          </span>
+                        </td>
+                        <td className="p-4 border-b border-[#123C73]/5 text-[#667085]">
+                          <span className="bg-[#123C73]/5 text-[#123C73] px-3 py-1 rounded-lg text-sm font-semibold">
+                            {stop.evening || "-"}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Pagination Controls */}
+        {data.totalPages > 1 && (
+          <div className="mt-16">
+            <div className="flex justify-center items-center gap-3">
+              {/* Previous button */}
+              <button
+                onClick={() => goToPage(currentPage - 1)}
+                disabled={!data.hasPrevPage || loading}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                  data.hasPrevPage && !loading
+                    ? 'bg-[#123C73] text-white hover:bg-[#0A2348] shadow-lg hover:shadow-xl hover:shadow-[#123C73]/20'
+                    : 'bg-[#E8EDF5] text-[#667085] cursor-not-allowed'
+                }`}
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Previous
+              </button>
+
+              {/* Page numbers */}
+              <div className="flex gap-2">
+                {getPageNumbers().map((pageNum, index) => (
+                  pageNum === '...' ? (
+                    <span key={`ellipsis-${index}`} className="px-3 py-2 text-[#667085] font-medium">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={pageNum}
+                      onClick={() => goToPage(pageNum)}
+                      disabled={loading}
+                      className={`w-11 h-11 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                        currentPage === pageNum
+                          ? 'bg-[#123C73] text-white shadow-lg'
+                          : 'bg-white text-[#667085] border border-[#123C73]/10 hover:border-[#123C73] hover:text-[#123C73]'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  )
+                ))}
+              </div>
+
+              {/* Next button */}
+              <button
+                onClick={() => goToPage(currentPage + 1)}
+                disabled={!data.hasNextPage || loading}
+                className={`flex items-center gap-2 px-5 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                  data.hasNextPage && !loading
+                    ? 'bg-[#123C73] text-white hover:bg-[#0A2348] shadow-lg hover:shadow-xl hover:shadow-[#123C73]/20'
+                    : 'bg-[#E8EDF5] text-[#667085] cursor-not-allowed'
+                }`}
+              >
+                Next
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Page info */}
+            <div className="mt-6 text-center">
+              <p className="text-sm text-[#667085]">
+                Page <span className="font-bold text-[#123C73]">{currentPage}</span> of{" "}
+                <span className="font-bold text-[#123C73]">{data.totalPages}</span>
+                {" • "}Showing {data.docs.length} of {data.totalDocs} bus routes
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
