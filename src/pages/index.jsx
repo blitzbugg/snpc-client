@@ -1,552 +1,151 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
+import { ArrowDown, ArrowRight, ChevronRight, Pause, Play, Sparkles, Volume2, VolumeX } from "lucide-react";
 import QuickInformation from "@/components/QuickInformation";
 import SchoolEvents from "@/components/SchoolEvents";
 import LeadersMessages from "@/components/LeadersMessages";
 import Gallery from "@/components/Gallery";
 import AnnouncementBoard from "@/components/AnnouncementBoard";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
-// Scroll-reveal component using IntersectionObserver
-function Reveal({
-  children,
-  className = "",
-  delay = 0,
-  threshold = 0.15,
-  from = "up",
-}) {
-  const [isVisible, setIsVisible] = useState(false);
+const HERO_VIDEO_SRC = "/sample.mp4";
+
+function Reveal({ children, className = "", delay = 0 }) {
   const ref = useRef(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (!ref.current) return;
-    if (typeof window === "undefined" || !("IntersectionObserver" in window)) {
-      setIsVisible(true);
-      return;
+    if (!ref.current || !("IntersectionObserver" in window)) {
+      setVisible(true);
+      return undefined;
     }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true);
-            observer.disconnect();
-          }
-        });
-      },
-      { threshold, rootMargin: "0px 0px -10% 0px" }
-    );
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: 0.12 });
     observer.observe(ref.current);
     return () => observer.disconnect();
-  }, [threshold]);
+  }, []);
 
-  const hiddenTransform =
-    from === "left"
-      ? "-translate-x-8"
-      : from === "right"
-        ? "translate-x-8"
-        : from === "down"
-          ? "-translate-y-8"
-          : "translate-y-8";
+  return <div ref={ref} className={`transition-all duration-700 ease-out ${visible ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"} ${className}`} style={{ transitionDelay: `${delay}ms` }}>{children}</div>;
+}
+
+function VideoFallback() {
+  return (
+    <div className="absolute inset-0 overflow-hidden bg-[#0A2348]">
+      <div className="absolute inset-0 hero-grid opacity-30" />
+      <div className="absolute -right-24 -top-24 h-[32rem] w-[32rem] rounded-full border border-[#F4C430]/25" />
+      <div className="absolute -bottom-28 -left-28 h-[28rem] w-[28rem] rounded-full bg-[#F4C430]/10 blur-3xl" />
+      <p className="absolute bottom-10 right-10 font-display text-3xl italic text-white/70">A campus in motion.</p>
+    </div>
+  );
+}
+
+function HeroVideo() {
+  const videoRef = useRef(null);
+  const [isMuted, setMuted] = useState(true);
+  const [isPlaying, setPlaying] = useState(true);
+  const hasVideo = Boolean(HERO_VIDEO_SRC);
+
+  const togglePlay = async () => {
+    if (!videoRef.current) return;
+    if (videoRef.current.paused) {
+      await videoRef.current.play();
+      setPlaying(true);
+    } else {
+      videoRef.current.pause();
+      setPlaying(false);
+    }
+  };
+
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    videoRef.current.muted = !videoRef.current.muted;
+    setMuted(videoRef.current.muted);
+  };
 
   return (
-    <div
-      ref={ref}
-      className={`transition-all duration-700 ease-out ${
-        isVisible
-          ? "opacity-100 translate-x-0 translate-y-0"
-          : `opacity-0 ${hiddenTransform}`
-      } ${className}`}
-      style={{ transitionDelay: `${delay}ms` }}
-    >
-      {children}
+    <div className="absolute inset-0 z-0">
+      {hasVideo ? (
+        <video ref={videoRef} autoPlay loop muted={isMuted} playsInline preload="metadata" className="h-full w-full object-cover" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}>
+          <source src={HERO_VIDEO_SRC} type="video/mp4" />
+        </video>
+      ) : <VideoFallback />}
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,rgba(5,24,48,0.46)_0%,transparent_52%,rgba(5,24,48,0.2)_100%)]" />
+      {hasVideo && <div className="absolute bottom-5 right-5 z-30 hidden gap-2 sm:flex">
+        <button onClick={togglePlay} aria-label={isPlaying ? "Pause campus film" : "Play campus film"} className="hero-control">{isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}</button>
+        <button onClick={toggleMute} aria-label={isMuted ? "Unmute campus film" : "Mute campus film"} className="hero-control">{isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}</button>
+      </div>}
     </div>
   );
 }
 
 export default function Home() {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.sbcs.edu.in";
-  const seoDescription =
-    "Sree Narayana Public School in Kollam — nurturing minds since 1997. Admissions, academics, facilities and community-focused education.";
-  
-  const [isLoading, setIsLoading] = useState(true);
-  const videoRef = useRef(null);
-
-  // Simulate initial loading
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Hero section skeleton
-  const HeroSkeleton = () => (
-    <div className="relative h-screen overflow-hidden">
-      <div className="absolute inset-0">
-        <Skeleton
-          height="100%"
-          width="100%"
-          containerClassName="h-full"
-          baseColor="#0A2348"
-          highlightColor="#123C73"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#123C73]/90 via-[#123C73]/60 to-[#123C73]/40" />
-      </div>
-
-      <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-5xl mx-auto">
-          <Skeleton 
-            height={40} 
-            width={200} 
-            className="mx-auto mb-8 rounded-full" 
-            baseColor="#123C73" 
-            highlightColor="#1a5099" 
-          />
-          <Skeleton 
-            height={100} 
-            width={600} 
-            className="mx-auto mb-6" 
-            baseColor="#123C73" 
-            highlightColor="#1a5099" 
-          />
-          <Skeleton 
-            height={100} 
-            width={400} 
-            className="mx-auto mb-12" 
-            baseColor="#123C73" 
-            highlightColor="#1a5099" 
-          />
-          <div className="flex gap-4 justify-center">
-            <Skeleton 
-              height={56} 
-              width={200} 
-              className="rounded-2xl" 
-              baseColor="#F4C430" 
-              highlightColor="#FFD95A" 
-            />
-            <Skeleton 
-              height={56} 
-              width={200} 
-              className="rounded-2xl" 
-              baseColor="#123C73" 
-              highlightColor="#1a5099" 
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC]">
+    <div className="overflow-hidden bg-[#FCFCFD] text-[#1B1F24]">
       <Head>
         <title>Sree Narayana Public School (SNPS) — Kollam</title>
-        <meta name="description" content={seoDescription} />
-        <meta name="keywords" content="Sree Narayana Public School, SNPS, schools in Kollam, Kollam" />
-        <meta name="robots" content="index,follow" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="Sree Narayana Public School in Kollam — nurturing minds, character and curiosity since 1997." />
         <link rel="canonical" href={siteUrl} />
-
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Sree Narayana Public School" />
-        <meta property="og:description" content={seoDescription} />
-        <meta property="og:url" content={siteUrl} />
-        <meta property="og:image" content={`${siteUrl}/og-image.svg`} />
-
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Sree Narayana Public School" />
-        <meta name="twitter:description" content={seoDescription} />
-        <meta name="twitter:image" content={`${siteUrl}/og-image.svg`} />
-
-        <link rel="sitemap" type="application/xml" href={`${siteUrl}/sitemap.xml`} />
-
-        {/* JSON-LD Organization */}
-        <script
-          key="ldjson"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "EducationalOrganization",
-              name: "Sree Narayana Public School",
-              alternateName: ["Sree Narayana Public School", "SNPS"],
-              url: siteUrl,
-              logo: `${siteUrl}/favicon.png`,
-              contactPoint: [{
-                "@type": "ContactPoint",
-                telephone: "",
-                contactType: "Admissions",
-                areaServed: "IN"
-              }],
-              address: {
-                "@type": "PostalAddress",
-                streetAddress: "Kizhavoor, Mukhathala",
-                addressLocality: "Kollam",
-                addressRegion: "Kerala",
-                postalCode: "691577",
-                addressCountry: "IN",
-              },
-            }),
-          }}
-        />
-        
-        {/* FAQ JSON-LD */}
-        <script
-          key="faq-json"
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: [
-                {
-                  "@type": "Question",
-                  name: "How do I apply for admission at Sree Narayana Public School (SNPS)?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Visit our Admissions page for the latest admission form, eligibility criteria and application deadlines. You can also contact the school office for assistance."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "Where is Sree Narayana Public School located?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "SNPS is located in Kizhavoor, Mukhathala, Kollam, Kerala (PIN 691577)."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  name: "What classes and curriculum does SNPS offer?",
-                  acceptedAnswer: {
-                    "@type": "Answer",
-                    text: "Sree Narayana Public School offers pre-primary to senior secondary education following a balanced curriculum focused on academics, co-curricular activities and character development."
-                  }
-                }
-              ]
-            }),
-          }}
-        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet" />
       </Head>
 
-      {/* ============================================ */}
-      {/* HERO SECTION WITH VIDEO PLACEHOLDER */}
-      {/* ============================================ */}
-      <div className="relative h-screen overflow-hidden">
-        {isLoading ? (
-          <HeroSkeleton />
-        ) : (
-          <>
-            {/* Video Background */}
-            <div className="absolute inset-0 bg-[#0A2348]">
-              {/* Video Placeholder - Replace src with actual video URL */}
-              <video
-                ref={videoRef}
-                className="w-full h-full object-cover opacity-60"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                poster="/hero-poster.jpg" // Add a poster image for loading state
-              >
-                {/* 
-                  PLACEHOLDER: Replace with actual school video
-                  <source src="/assets/school-tour.mp4" type="video/mp4" />
-                  <source src="/assets/school-tour.webm" type="video/webm" />
-                */}
-                Your browser does not support the video tag.
-              </video>
+      <section className="relative isolate min-h-[100svh] overflow-hidden bg-[#0A2348]">
+        <HeroVideo />
+        <div className="pointer-events-none absolute inset-0 z-[1] hero-noise opacity-[0.025]" />
 
-              {/* Video Overlay Gradients */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#123C73]/95 via-[#123C73]/70 to-[#123C73]/40"></div>
-              <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/40 via-transparent to-transparent"></div>
-              
-              {/* Grid Pattern Overlay */}
-              <div 
-                className="absolute inset-0 opacity-10"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
-                  backgroundSize: '60px 60px'
-                }}
-              ></div>
-            </div>
+        <header className="absolute inset-x-5 top-1/2 z-20 -translate-y-1/2 text-center sm:inset-x-8 lg:inset-x-12">
+          <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#F4C430] sm:text-xs">Kollam · Est. 1997</p>
+          <h1 className="font-display mt-4 text-4xl leading-[0.94] tracking-[-0.04em] text-white drop-shadow-[0_5px_18px_rgba(0,0,0,0.45)] sm:text-6xl lg:text-8xl">Sree Narayana<br />Public School</h1>
+          <p className="mx-auto mt-5 max-w-lg text-sm leading-6 text-white/90 drop-shadow-md sm:text-base">A community where curiosity, character and confidence grow together.</p>
+        </header>
 
-            {/* Hero Content */}
-            <div className="relative z-10 h-full flex items-center justify-center px-4 sm:px-6 lg:px-8">
-              <div className="text-center max-w-5xl mx-auto">
-                {/* Top Badge */}
-                <div className="animate-fade-in-up">
-                  <div className="inline-flex items-center px-6 py-3 bg-[#F4C430]/10 backdrop-blur-md rounded-full border border-[#F4C430]/20 mb-8">
-                    <div className="w-3 h-3 bg-[#F4C430] rounded-full mr-3 animate-pulse"></div>
-                    <span className="text-[#F4C430] font-semibold tracking-wider text-sm uppercase">
-                      Established 1997
-                    </span>
-                  </div>
-                </div>
+        <div className="absolute bottom-5 left-1/2 z-40 w-[calc(100%-2rem)] -translate-x-1/2 sm:bottom-7 sm:left-auto sm:right-5 sm:w-auto sm:translate-x-0 lg:right-8"><AnnouncementBoard /></div>
+        <a href="#about-us" aria-label="Explore more" className="absolute bottom-7 left-1/2 z-20 hidden -translate-x-1/2 text-white/90 transition hover:text-[#F4C430] xl:inline-flex"><ArrowDown className="h-5 w-5 animate-bounce" /></a>
+      </section>
 
-                {/* Main Heading */}
-                <h1 className="animate-fade-in-up animation-delay-200">
-                  <span className="block text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-4 leading-tight">
-                    Sree Narayana
-                  </span>
-                  <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-[#F4C430] via-[#FFD95A] to-[#F4C430] bg-clip-text text-transparent mb-6">
-                    Public School
-                  </span>
-                </h1>
-
-                {/* Subtitle */}
-                <p className="animate-fade-in-up animation-delay-400 text-lg sm:text-xl md:text-2xl text-white/90 max-w-3xl mx-auto mb-12 font-light leading-relaxed">
-                  Nurturing minds, building character, and fostering excellence 
-                  through values of kindness, humanism, and equality
-                </p>
-
-                {/* CTA Buttons */}
-                <div className="animate-fade-in-up animation-delay-600 flex flex-col sm:flex-row gap-4 justify-center items-center">
-                  <a
-                    href="/admission"
-                    className="group px-8 py-4 bg-[#F4C430] text-[#123C73] font-bold rounded-2xl hover:bg-[#FFD95A] transform hover:scale-105 transition-all duration-300 shadow-2xl shadow-[#F4C430]/20 text-lg"
-                  >
-                    Admissions Open 2025
-                    <svg
-                      className="w-5 h-5 ml-2 inline-block group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2.5}
-                        d="M13 7l5 5m0 0l-5 5m5-5H6"
-                      />
-                    </svg>
-                  </a>
-                  <a
-                    href="/the-school/objectives"
-                    className="px-8 py-4 bg-white/10 backdrop-blur-md text-white font-semibold rounded-2xl hover:bg-white/20 border-2 border-white/30 transition-all duration-300 hover:scale-105 text-lg"
-                  >
-                    Explore Our School
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            {/* Announcement Board - Bottom Left */}
-            <div className="absolute bottom-8 left-8 z-30 animate-fade-in-up animation-delay-800">
-              <AnnouncementBoard />
-            </div>
-
-            {/* Scroll Indicator */}
-            <div className="absolute bottom-8 right-8 z-20 hidden lg:block">
-              <div className="animate-bounce">
-                <div className="w-10 h-16 border-2 border-white/30 rounded-full flex justify-center p-2">
-                  <div className="w-2 h-2 bg-[#F4C430] rounded-full animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* ============================================ */}
-      {/* MAIN CONTENT SECTIONS */}
-      {/* ============================================ */}
-      <div className="bg-[#F7F9FC]">
-        {/* Welcome Section */}
-        <Reveal>
-          <div className="relative overflow-hidden bg-gradient-to-br from-white via-[#F7F9FC] to-white py-16 lg:py-24">
-            <div className="absolute inset-0">
-              <div className="absolute top-20 left-10 w-72 h-72 bg-[#123C73]/5 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#F4C430]/5 rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                {/* Left Column - Text Content */}
-                <div className="text-center lg:text-left space-y-8">
-                  <Reveal delay={100}>
-                    <div className="inline-flex items-center px-5 py-2.5 bg-[#123C73]/5 rounded-full border border-[#123C73]/10">
-                      <div className="w-2.5 h-2.5 bg-[#F4C430] rounded-full mr-3"></div>
-                      <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
-                        Welcome to SNPS
-                      </span>
-                    </div>
-                  </Reveal>
-
-                  <Reveal delay={200}>
-                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-[#1B1F24]">
-                      Shaping Future
-                      <br />
-                      <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
-                        Leaders
-                      </span>
-                      {" "}Today
-                    </h2>
-                  </Reveal>
-
-                  <Reveal delay={300}>
-                    <p className="text-lg md:text-xl text-[#667085] max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                      At Sree Narayana Public School, we believe in nurturing 
-                      young minds with values of{" "}
-                      <span className="text-[#123C73] font-semibold">
-                        compassion, integrity, and academic excellence
-                      </span>
-                      .
-                    </p>
-                  </Reveal>
-
-                  <Reveal delay={400}>
-                    <div className="flex flex-wrap justify-center lg:justify-start gap-8 pt-6">
-                      <div className="text-center">
-                        <div className="text-3xl md:text-5xl font-extrabold text-[#123C73] mb-1">
-                          3,500+
-                        </div>
-                        <div className="text-sm text-[#667085] font-medium uppercase tracking-wider">
-                          Students
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-3xl md:text-5xl font-extrabold text-[#123C73] mb-1">
-                          140+
-                        </div>
-                        <div className="text-sm text-[#667085] font-medium uppercase tracking-wider">
-                          Teachers
-                        </div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-3xl md:text-5xl font-extrabold text-[#123C73] mb-1">
-                          25+
-                        </div>
-                        <div className="text-sm text-[#667085] font-medium uppercase tracking-wider">
-                          Years
-                        </div>
-                      </div>
-                    </div>
-                  </Reveal>
-
-                  <Reveal delay={500}>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-6">
-                      <a
-                        href="/admission"
-                        className="group inline-flex items-center justify-center px-8 py-4 bg-[#123C73] text-white font-semibold rounded-2xl hover:bg-[#0A2348] transition-all duration-300 hover:shadow-xl hover:shadow-[#123C73]/20 hover:-translate-y-1"
-                      >
-                        Apply for Admission
-                        <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                        </svg>
-                      </a>
-                      <a
-                        href="/the-school/objectives"
-                        className="group inline-flex items-center justify-center px-8 py-4 bg-[#FCFCFD] text-[#123C73] font-semibold rounded-2xl border-2 border-[#123C73]/20 hover:border-[#123C73] transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                      >
-                        Learn More
-                        <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </a>
-                    </div>
-                  </Reveal>
-                </div>
-
-                {/* Right Column - Image */}
-                <div className="relative">
-                  <Reveal delay={600} from="right">
-                    <div className="relative">
-                      <div className="relative rounded-3xl overflow-hidden shadow-2xl shadow-[#123C73]/10 transform hover:rotate-1 transition-transform duration-500">
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#123C73]/10 to-[#F4C430]/10"></div>
-                        <div
-                          className="h-96 lg:h-[550px] bg-cover bg-center"
-                          style={{
-                            backgroundImage: `url('/guru.png')`,
-                          }}
-                        />
-                        
-                        <div className="absolute bottom-6 left-6 right-6">
-                          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-[#123C73]/10">
-                            <div className="flex items-center gap-3 mb-3">
-                              <div className="w-10 h-10 bg-[#F4C430] rounded-xl flex items-center justify-center">
-                                <svg className="w-6 h-6 text-[#123C73]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                </svg>
-                              </div>
-                              <div>
-                                <h3 className="font-bold text-[#1B1F24]">Excellence in Education</h3>
-                                <p className="text-sm text-[#667085]">Empowering students since 1997</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="absolute -top-6 -right-6 w-24 h-24 bg-[#F4C430] rounded-2xl flex items-center justify-center shadow-xl rotate-12">
-                        <span className="text-3xl">🎓</span>
-                      </div>
-                    </div>
-                  </Reveal>
-                </div>
-              </div>
-            </div>
+      <section className="bg-white px-5 py-14 sm:px-6 sm:py-16 lg:px-8">
+        <Reveal className="mx-auto grid max-w-7xl items-center gap-8 rounded-[2rem] border border-[#123C73]/10 bg-[#FCFCFD] p-7 shadow-[0_18px_55px_rgba(18,60,115,0.08)] sm:p-10 lg:grid-cols-[1.2fr_0.8fr] lg:gap-16 lg:p-12">
+          <div className="text-center lg:text-left">
+            <p className="inline-flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.22em] text-[#123C73]"><span className="h-px w-8 bg-[#F4C430]" /> Learning beyond the classroom</p>
+            <h2 className="font-display mt-5 text-4xl leading-[0.98] tracking-[-0.04em] text-[#123C73] sm:text-5xl">Where bright minds <em className="text-[#0A2348]">find their way.</em></h2>
+            <p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-[#667085] sm:text-base lg:mx-0">An education grounded in curiosity, compassion and the enduring values of Sree Narayana Guru.</p>
+          </div>
+          <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <a href="/admission" className="group inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#123C73] px-6 py-4 text-sm font-bold text-white transition hover:-translate-y-0.5 hover:bg-[#0A2348]">Begin your journey <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" /></a>
+            <a href="#about-us" className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-[#123C73]/15 bg-white px-6 py-4 text-sm font-semibold text-[#123C73] transition hover:border-[#123C73]/35 hover:bg-[#F7F9FC]">Discover SNPS <ChevronRight className="h-4 w-4" /></a>
           </div>
         </Reveal>
+      </section>
 
-        {/* Quick Information Section */}
-        <Reveal>
-          <QuickInformation />
-        </Reveal>
+      <section className="relative bg-[#123C73] py-11 text-center text-white sm:py-14">
+        <div className="absolute inset-0 quote-pattern opacity-30" />
+        <Reveal className="relative mx-auto max-w-4xl px-5"><Sparkles className="mx-auto h-4 w-4 text-[#F4C430]" /><blockquote className="font-display mt-4 text-2xl leading-snug sm:text-3xl lg:text-4xl">“One caste, one religion, one God for mankind.”</blockquote><p className="mt-4 text-[11px] font-bold uppercase tracking-[0.22em] text-[#F4C430]">Sree Narayana Guru</p></Reveal>
+      </section>
 
-        {/* School Events Section */}
-        <Reveal>
-          <SchoolEvents />
-        </Reveal>
+      <section id="about-us" className="relative scroll-mt-20 bg-white py-20 sm:py-24 lg:py-32">
+        <div className="absolute left-0 top-0 h-64 w-64 rounded-br-full bg-[#F4C430]/10" />
+        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 sm:px-6 lg:grid-cols-[0.9fr_1.1fr] lg:gap-24 lg:px-8">
+          <Reveal className="relative mx-auto w-full max-w-md lg:mx-0"><div className="absolute -bottom-5 -right-5 h-full w-full rounded-[2rem] border border-[#F4C430]/50" /><div className="relative overflow-hidden rounded-[2rem] bg-[#123C73] p-3 shadow-2xl shadow-[#123C73]/15"><img src="/guru.png" alt="Portrait of Sree Narayana Guru" className="h-[420px] w-full rounded-[1.35rem] object-cover object-center sm:h-[500px]" /><div className="absolute inset-x-8 bottom-8 rounded-2xl bg-white/95 px-5 py-4 text-[#123C73] shadow-lg backdrop-blur-sm"><p className="text-xs font-bold uppercase tracking-[0.18em] text-[#667085]">Our foundation</p><p className="font-display mt-1 text-xl italic">Knowledge that uplifts.</p></div></div></Reveal>
+          <div className="text-center lg:text-left"><Reveal><p className="section-kicker justify-center lg:justify-start">A place to become</p><h2 className="font-display mt-6 text-4xl leading-[1.05] tracking-[-0.03em] text-[#1B1F24] sm:text-5xl">Every child deserves an education that feels <em className="text-[#123C73]">expansive.</em></h2></Reveal><Reveal delay={120}><p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-[#667085] lg:mx-0 lg:text-lg">At SNPS, we pair academic rigour with the confidence to ask questions, the care to work together and the courage to serve the world beyond the classroom.</p></Reveal><Reveal delay={200}><div className="mt-9 grid gap-3 text-left sm:grid-cols-2">{[["Rooted in values", "Character shapes everything we do."], ["Ready for tomorrow", "Curiosity grows into capability."]].map(([title, body]) => <div key={title} className="rounded-2xl border border-[#123C73]/10 bg-[#F7F9FC] p-5"><p className="font-semibold text-[#123C73]">{title}</p><p className="mt-1 text-sm leading-6 text-[#667085]">{body}</p></div>)}</div></Reveal><Reveal delay={280}><a href="/the-school/objectives" className="mt-9 inline-flex items-center gap-2 border-b-2 border-[#F4C430] pb-1 text-sm font-bold text-[#123C73] transition hover:gap-3">Explore our philosophy <ArrowRight className="h-4 w-4" /></a></Reveal></div>
+        </div>
+      </section>
 
-        {/* Leaders Messages Section */}
-        <Reveal delay={100}>
-          <LeadersMessages />
-        </Reveal>
+      <div className="bg-[#F7F9FC]"><QuickInformation /><SchoolEvents /><Gallery /><LeadersMessages /></div>
 
-        {/* Gallery Section */}
-        <Reveal>
-          <Gallery />
-        </Reveal>
-      </div>
-
-      {/* Custom Animations */}
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .animate-fade-in-up {
-          animation: fadeInUp 0.8s ease-out both;
-        }
-        
-        .animation-delay-200 {
-          animation-delay: 0.2s;
-        }
-        
-        .animation-delay-400 {
-          animation-delay: 0.4s;
-        }
-        
-        .animation-delay-600 {
-          animation-delay: 0.6s;
-        }
-        
-        .animation-delay-800 {
-          animation-delay: 0.8s;
-        }
+      <style jsx global>{`
+        .font-display { font-family: "Playfair Display", Georgia, serif !important; }
+        .hero-control { display: grid; height: 2.5rem; width: 2.5rem; place-items: center; border-radius: 9999px; background: rgba(10,35,72,.7); color: white; backdrop-filter: blur(10px); }
+        .hero-grid { background-image: linear-gradient(rgba(255,255,255,.16) 1px, transparent 1px), linear-gradient(90deg,rgba(255,255,255,.16) 1px,transparent 1px); background-size: 38px 38px; }
+        .hero-noise { background-image: radial-gradient(rgba(255,255,255,.85) .55px, transparent .55px); background-size: 5px 5px; }
+        .quote-pattern { background-image: radial-gradient(rgba(244,196,48,.45) 1px, transparent 1px); background-size: 20px 20px; }
+        .section-kicker { display: inline-flex; align-items: center; gap: .75rem; color: #123C73; font-size: .7rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
+        .section-kicker::before { content: ""; height: 1px; width: 2rem; background: #F4C430; }
       `}</style>
     </div>
   );
