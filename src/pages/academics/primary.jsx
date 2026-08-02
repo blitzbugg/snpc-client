@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { School, Calculator, Globe, Microscope, PenTool, Users, Sparkles, GraduationCap, BookOpen } from 'lucide-react';
 
 // Scroll-reveal component
 function Reveal({
@@ -36,17 +37,17 @@ function Reveal({
 
   const hiddenTransform =
     from === "left"
-      ? "-translate-x-6"
+      ? "-translate-x-8"
       : from === "right"
-      ? "translate-x-6"
+      ? "translate-x-8"
       : from === "down"
-      ? "-translate-y-6"
-      : "translate-y-6";
+      ? "-translate-y-8"
+      : "translate-y-8";
 
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out will-change-transform ${
+      className={`transition-all duration-700 ease-out ${
         isVisible
           ? "opacity-100 translate-x-0 translate-y-0"
           : `opacity-0 ${hiddenTransform}`
@@ -82,80 +83,116 @@ const PrimaryPage = () => {
     fetchData();
   }, []);
 
+  // Primary education features
+  const primaryFeatures = [
+    {
+      icon: Calculator,
+      title: "Mathematics",
+      description: "Strong foundation in numerical skills and problem-solving"
+    },
+    {
+      icon: Globe,
+      title: "Languages",
+      description: "English, Hindi, and regional language proficiency"
+    },
+    {
+      icon: Microscope,
+      title: "Science",
+      description: "Hands-on experiments and scientific inquiry"
+    },
+    {
+      icon: PenTool,
+      title: "Creative Arts",
+      description: "Art, craft, music, and creative expression"
+    },
+    {
+      icon: Users,
+      title: "Physical Education",
+      description: "Sports and physical activities for holistic development"
+    },
+    {
+      icon: School,
+      title: "Value Education",
+      description: "Moral values and character building programs"
+    }
+  ];
+
   return (
-    <div className="relative bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-16 lg:py-24 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600 rounded-full translate-x-1/3 -translate-y-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500 rounded-full -translate-x-1/2 translate-y-1/2"></div>
-        <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-sky-400 rounded-full"></div>
+    <div className="relative bg-gradient-to-br from-[#F7F9FC] via-white to-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-80 h-80 bg-[#123C73]/3 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#F4C430]/3 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#123C73]/2 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 lg:mb-20">
           {loading ? (
             <>
+              <div className="flex justify-center mb-6">
+                <Skeleton
+                  height={40}
+                  width={160}
+                  className="rounded-full"
+                  baseColor="#E8EDF5"
+                  highlightColor="#F7F9FC"
+                />
+              </div>
               <Skeleton
-                height={8}
-                width={120}
-                className="mx-auto mb-6 rounded-full"
-                baseColor="#f3f4f6"
-                highlightColor="#e5e7eb"
-              />
-              <Skeleton
-                height={48}
-                width={400}
+                height={56}
+                width={500}
                 className="mx-auto mb-6"
-                baseColor="#f3f4f6"
-                highlightColor="#e5e7eb"
+                baseColor="#E8EDF5"
+                highlightColor="#F7F9FC"
               />
               <Skeleton
                 height={24}
                 width={600}
                 className="mx-auto"
-                baseColor="#f3f4f6"
-                highlightColor="#e5e7eb"
+                baseColor="#E8EDF5"
+                highlightColor="#F7F9FC"
                 count={2}
               />
             </>
           ) : error ? (
             <div className="text-center">
-              <div className="inline-flex items-center px-4 py-2 bg-red-100 rounded-full border border-red-200 mb-6">
-                <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                <span className="text-red-600 font-semibold text-sm tracking-wide">
-                  ERROR
+              <div className="inline-flex items-center px-5 py-2.5 bg-red-50 rounded-full border border-red-200 mb-6">
+                <Sparkles className="w-4 h-4 text-red-500 mr-2" />
+                <span className="text-red-600 font-semibold text-sm tracking-wider uppercase">
+                  Error
                 </span>
               </div>
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-[#1B1F24] mb-6">
                 Unable to Load Content
               </h2>
-              <p className="text-lg text-red-600">{error}</p>
+              <p className="text-lg text-red-500">{error}</p>
             </div>
           ) : (
             <>
               <Reveal>
-                <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-full border border-blue-300 mb-6">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mr-2 animate-pulse"></div>
-                  <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent font-semibold text-sm tracking-wide">
-                    FOUNDATIONAL EDUCATION
+                <div className="inline-flex items-center px-5 py-2.5 bg-[#123C73]/5 rounded-full border border-[#123C73]/10 mb-6">
+                  <School className="w-4 h-4 text-[#F4C430] mr-2" />
+                  <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                    Foundational Education
                   </span>
                 </div>
               </Reveal>
 
               <Reveal delay={100}>
-                <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#1B1F24] mb-6 leading-tight">
                   {data?.title ? (
                     <>
                       {data.title.split(" ").slice(0, -1).join(" ")}{" "}
-                      <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-600 bg-clip-text text-transparent">
+                      <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
                         {data.title.split(" ").slice(-1)[0]}
                       </span>
                     </>
                   ) : (
                     <>
                       Primary{" "}
-                      <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                      <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
                         Section
                       </span>
                     </>
@@ -164,16 +201,23 @@ const PrimaryPage = () => {
               </Reveal>
 
               <Reveal delay={200}>
-                <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                  {data?.subtitle}
+                <p className="text-lg md:text-xl text-[#667085] max-w-3xl mx-auto leading-relaxed font-light">
+                  {data?.subtitle || 'Building strong academic foundations for lifelong learning and success'}
                 </p>
               </Reveal>
+
+              {/* Decorative Divider */}
+              <div className="flex items-center justify-center gap-4 mt-8">
+                <div className="h-px w-12 bg-[#F4C430]/30"></div>
+                <GraduationCap className="w-5 h-5 text-[#F4C430]" />
+                <div className="h-px w-12 bg-[#F4C430]/30"></div>
+              </div>
             </>
           )}
         </div>
 
         {/* Main Content Section */}
-        <div className="grid lg:grid-cols-2 gap-16 items-start mb-20">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start mb-16 lg:mb-24">
           {/* Image Section */}
           <div className="relative">
             <Reveal delay={300}>
@@ -183,41 +227,54 @@ const PrimaryPage = () => {
                     <Skeleton
                       height="100%"
                       width="100%"
-                      className="rounded-2xl"
-                      baseColor="#f3f4f6"
-                      highlightColor="#e5e7eb"
+                      className="rounded-3xl"
+                      baseColor="#E8EDF5"
+                      highlightColor="#F7F9FC"
                     />
                   </div>
                 ) : (
                   (data?.mainImage || data?.image) && (
-                    <div className="relative overflow-hidden rounded-2xl shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
-                      <img
-                        src={data?.mainImage?.url || data?.image?.url}
-                        alt={data?.mainImage?.alt || data?.image?.alt}
-                        className="w-full h-auto object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/30 via-transparent to-transparent"></div>
+                    <div className="relative">
+                      <div className="relative overflow-hidden rounded-3xl shadow-2xl shadow-[#123C73]/10 group">
+                        <img
+                          src={data?.mainImage?.url || data?.image?.url}
+                          alt={data?.mainImage?.alt || data?.image?.alt || 'Primary Section'}
+                          className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                        />
+                        
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/30 via-transparent to-transparent"></div>
 
-                      {/* Floating Specs */}
-                      <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm px-4 py-3 rounded-xl shadow-lg">
-                        <div className="grid grid-cols-2 gap-4 text-center">
-                          <div>
-                            <p className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                              I-V
-                            </p>
-                            <p className="text-xs text-gray-600 font-semibold">
-                              Grade Levels
-                            </p>
-                          </div>
-                          <div>
-                            <p className="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
-                              8+
-                            </p>
-                            <p className="text-xs text-gray-600 font-semibold">
-                              Core Subjects
-                            </p>
+                        {/* Stats Overlay */}
+                        <div className="absolute bottom-6 left-6 right-6">
+                          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-[#123C73]/10">
+                            <div className="grid grid-cols-2 gap-6 text-center">
+                              <div>
+                                <div className="flex items-center justify-center gap-2 mb-2">
+                                  <GraduationCap className="w-5 h-5 text-[#123C73]" />
+                                  <p className="text-2xl md:text-4xl font-extrabold text-[#123C73]">
+                                    I-V
+                                  </p>
+                                </div>
+                                <p className="text-xs text-[#667085] font-semibold uppercase tracking-wider">Grade Levels</p>
+                              </div>
+                              <div>
+                                <div className="flex items-center justify-center gap-2 mb-2">
+                                  <BookOpen className="w-5 h-5 text-[#123C73]" />
+                                  <p className="text-2xl md:text-4xl font-extrabold text-[#123C73]">
+                                    8+
+                                  </p>
+                                </div>
+                                <p className="text-xs text-[#667085] font-semibold uppercase tracking-wider">Core Subjects</p>
+                              </div>
+                            </div>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Decorative Element */}
+                      <div className="absolute -top-4 -right-4 w-20 h-20 bg-[#F4C430] rounded-2xl flex items-center justify-center shadow-xl rotate-12">
+                        <School className="w-10 h-10 text-[#123C73]" />
                       </div>
                     </div>
                   )
@@ -230,12 +287,18 @@ const PrimaryPage = () => {
               <div className="grid grid-cols-3 gap-4 mt-6">
                 {data.galleryImages.map((img, index) => (
                   <Reveal key={img.id} delay={400 + index * 100}>
-                    <div className="aspect-square overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                    <div className="group relative aspect-square overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer">
                       <img
                         src={img.url}
                         alt={img.alt}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                       />
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center p-3">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5">
+                          <p className="text-xs font-semibold text-[#123C73]">View Image</p>
+                        </div>
+                      </div>
                     </div>
                   </Reveal>
                 ))}
@@ -246,15 +309,15 @@ const PrimaryPage = () => {
           {/* Text Content */}
           <div className="space-y-8">
             <Reveal delay={400} from="right">
-              <div className="prose prose-lg max-w-none">
+              <div>
                 {loading ? (
                   <div className="space-y-6">
                     {[...Array(3)].map((_, index) => (
                       <div key={index} className="space-y-3">
                         <Skeleton
                           height={20}
-                          baseColor="#f3f4f6"
-                          highlightColor="#e5e7eb"
+                          baseColor="#E8EDF5"
+                          highlightColor="#F7F9FC"
                           count={4}
                         />
                       </div>
@@ -263,12 +326,21 @@ const PrimaryPage = () => {
                 ) : (
                   <div className="space-y-6">
                     {data?.content?.map((item, index) => (
-                        <Reveal
-                          key={item.id}
-                          delay={500 + index * 100}
-                          from="right"
-                        >
-                          <p className="text-lg text-gray-700 leading-relaxed">
+                      <Reveal
+                        key={item.id}
+                        delay={500 + index * 100}
+                        from="right"
+                      >
+                        <div className="flex gap-4 group">
+                          {/* Step Number */}
+                          <div className="flex-shrink-0">
+                            <div className="w-10 h-10 bg-gradient-to-br from-[#F4C430]/10 to-[#123C73]/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                              <span className="text-[#123C73] font-bold">{index + 1}</span>
+                            </div>
+                          </div>
+                          
+                          {/* Content */}
+                          <p className="text-lg text-[#667085] leading-relaxed group-hover:text-[#1B1F24] transition-colors duration-300 flex-1">
                             {item.paragraph?.split('\n').map((line, i, arr) => (
                               <React.Fragment key={i}>
                                 {line}
@@ -276,129 +348,122 @@ const PrimaryPage = () => {
                               </React.Fragment>
                             ))}
                           </p>
-                        </Reveal>
+                        </div>
+                      </Reveal>
                     ))}
                   </div>
                 )}
               </div>
             </Reveal>
+
+            {/* Primary Info Card */}
+            {!loading && !error && (
+              <Reveal delay={800} from="right">
+                <div className="bg-white rounded-3xl p-6 shadow-lg border border-[#123C73]/5 mt-8">
+                  <h3 className="text-lg font-bold text-[#1B1F24] mb-4 flex items-center gap-2">
+                    <BookOpen className="w-5 h-5 text-[#F4C430]" />
+                    Core Subjects
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {primaryFeatures.slice(0, 4).map((feature, index) => {
+                      const IconComponent = feature.icon;
+                      return (
+                        <div key={index} className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-[#F4C430] rounded-full flex-shrink-0"></div>
+                          <span className="text-sm text-[#667085] font-medium">{feature.title}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </Reveal>
+            )}
           </div>
         </div>
 
-        {/* Features Grid Section */}
-        {/* {!loading && !error && data?.features && (
-          <div className="mb-20">
-            <Reveal delay={600}>
-              <h3 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-4">
-                Educational{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                  Features
-                </span>
-              </h3>
-              <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Comprehensive programs designed for holistic growth and academic excellence
-              </p>
-            </Reveal>
+        {/* Primary Features Section */}
+        {!loading && !error && (
+          <Reveal delay={600}>
+            <div>
+              {/* Section Divider */}
+              <div className="flex items-center justify-center gap-4 mb-12">
+                <div className="h-px flex-1 bg-[#123C73]/10"></div>
+                <div className="px-6 py-2 bg-[#123C73]/5 rounded-full border border-[#123C73]/10">
+                  <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                    Curriculum
+                  </span>
+                </div>
+                <div className="h-px flex-1 bg-[#123C73]/10"></div>
+              </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {data.features.map((feature, index) => (
-                <Reveal key={feature.id} delay={700 + index * 100}>
-                  <div className="group bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-                    <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                      {feature.icon}
-                    </div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                      {feature.title}
-                    </h4>
-                    <p className="text-gray-600 leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        )} */}
+              <div className="text-center mb-12">
+                <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1B1F24] mb-4">
+                  Educational{" "}
+                  <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
+                    Features
+                  </span>
+                </h3>
+                <p className="text-lg text-[#667085] max-w-2xl mx-auto">
+                  Comprehensive programs designed for holistic growth and academic excellence
+                </p>
+              </div>
 
-        {/* Use Cases Section */}
-        {/* {!loading && !error && data?.useCases && (
-          <div className="mb-20">
-            <Reveal delay={900}>
-              <h3 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-4">
-                Learning{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                  Outcomes
-                </span>
-              </h3>
-              <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
-                Key competencies and skills students develop during primary education
-              </p>
-            </Reveal>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {data.useCases.map((useCase, index) => (
-                <Reveal key={useCase.id} delay={1000 + index * 100}>
-                  <div className="bg-gradient-to-br from-white to-blue-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-blue-100">
-                    <div className="flex items-start gap-4">
-                      <div className="flex-shrink-0 w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center text-3xl shadow-lg">
-                        {useCase.icon}
-                      </div>
-                      <div className="flex-1">
-                        <h4 className="text-xl font-bold text-gray-900 mb-2">
-                          {useCase.title}
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                {primaryFeatures.map((feature, index) => {
+                  const IconComponent = feature.icon;
+                  return (
+                    <Reveal key={index} delay={700 + index * 100}>
+                      <div className="group relative bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 border border-[#123C73]/5 hover:border-[#F4C430]/20">
+                        {/* Top Gradient Line */}
+                        <div className="absolute top-0 left-4 right-4 h-1 bg-gradient-to-r from-[#123C73] to-[#F4C430] rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                        
+                        {/* Icon */}
+                        <div className="relative inline-flex mb-4">
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#F4C430]/20 to-[#123C73]/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                          <div className="relative w-14 h-14 bg-gradient-to-br from-[#F4C430]/10 to-[#123C73]/10 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                            <IconComponent className="w-7 h-7 text-[#123C73]" />
+                          </div>
+                        </div>
+                        
+                        {/* Content */}
+                        <h4 className="text-lg font-bold text-[#1B1F24] mb-2 group-hover:text-[#123C73] transition-colors duration-300">
+                          {feature.title}
                         </h4>
-                        <p className="text-gray-600">{useCase.description}</p>
-                      </div>
-                    </div>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        )} */}
+                        <p className="text-sm text-[#667085] leading-relaxed">
+                          {feature.description}
+                        </p>
 
-        {/* Specifications Card */}
-        {/* {!loading && !error && data?.specifications && (
-          <Reveal delay={1100}>
-            <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl p-8 lg:p-12 shadow-2xl mb-20">
-              <h3 className="text-3xl font-bold text-white text-center mb-8">
-                Quick Overview
-              </h3>
-              <div className="grid md:grid-cols-4 gap-6">
-                {data.specifications.map((spec, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center border border-white/20"
-                  >
-                    <p className="text-3xl lg:text-4xl font-bold text-white mb-2">
-                      {spec.value}
-                    </p>
-                    <p className="text-cyan-100 font-medium">{spec.label}</p>
-                  </div>
-                ))}
+                        {/* Hover Arrow */}
+                        <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                          <div className="w-8 h-8 bg-[#F4C430] rounded-xl flex items-center justify-center">
+                            <svg className="w-4 h-4 text-[#123C73]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </Reveal>
+                  );
+                })}
               </div>
             </div>
           </Reveal>
-        )} */}
+        )}
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+      {/* Decorative Floating Elements */}
+      <div className="absolute top-20 left-10 w-3 h-3 bg-[#123C73] rounded-full animate-pulse opacity-20"></div>
       <div
-        className="absolute top-32 right-20 w-2 h-2 bg-cyan-500 rounded-full animate-pulse"
+        className="absolute top-32 right-20 w-2 h-2 bg-[#F4C430] rounded-full animate-pulse opacity-30"
         style={{ animationDelay: "1s" }}
       ></div>
       <div
-        className="absolute bottom-20 left-20 w-4 h-4 bg-sky-400 rounded-full animate-pulse"
+        className="absolute bottom-20 left-20 w-4 h-4 bg-[#123C73] rounded-full animate-pulse opacity-20"
         style={{ animationDelay: "2s" }}
       ></div>
       <div
-        className="absolute bottom-40 right-32 w-3 h-3 bg-blue-600 rounded-full animate-pulse"
+        className="absolute bottom-40 right-32 w-3 h-3 bg-[#F4C430] rounded-full animate-pulse opacity-30"
         style={{ animationDelay: "1.5s" }}
-      ></div>
-      <div
-        className="absolute top-1/2 left-32 w-2 h-2 bg-cyan-500 rounded-full animate-pulse"
-        style={{ animationDelay: "0.5s" }}
       ></div>
     </div>
   );
