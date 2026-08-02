@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { Trophy, Download, FileText, Calendar, Award, Sparkles, ArrowRight, RefreshCw } from 'lucide-react';
 
 // Scroll-reveal component for animations
 function Reveal({
@@ -36,17 +37,17 @@ function Reveal({
 
   const hiddenTransform =
     from === "left"
-      ? "-translate-x-6"
+      ? "-translate-x-8"
       : from === "right"
-      ? "translate-x-6"
+      ? "translate-x-8"
       : from === "down"
-      ? "-translate-y-6"
-      : "translate-y-6";
+      ? "-translate-y-8"
+      : "translate-y-8";
 
   return (
     <div
       ref={ref}
-      className={`transition-all duration-700 ease-out will-change-transform ${
+      className={`transition-all duration-700 ease-out ${
         isVisible
           ? "opacity-100 translate-x-0 translate-y-0"
           : `opacity-0 ${hiddenTransform}`
@@ -95,7 +96,6 @@ const ResultsPage = () => {
         setLoading(true);
         setError(null);
 
-        // Get API URL from environment variable
         const apiUrl = process.env.NEXT_PUBLIC_CMS_URL || process.env.REACT_APP_CMS_URL;
         
         if (!apiUrl) {
@@ -110,7 +110,6 @@ const ResultsPage = () => {
 
         const data = await response.json();
         
-        // Extract docs array from response
         const docs = Array.isArray(data.docs) ? data.docs : [];
         
         if (docs.length === 0) {
@@ -130,81 +129,97 @@ const ResultsPage = () => {
   }, []);
 
   return (
-    <div className="relative bg-gradient-to-br from-blue-50 via-white to-cyan-50 py-16 lg:py-24 overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600 rounded-full translate-x-1/3 -translate-y-1/3"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500 rounded-full -translate-x-1/2 translate-y-1/2"></div>
-        <div className="absolute top-1/2 right-1/3 w-48 h-48 bg-sky-400 rounded-full"></div>
+    <div className="relative bg-gradient-to-br from-[#F7F9FC] via-white to-[#F7F9FC] py-16 lg:py-24 overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-20 left-10 w-80 h-80 bg-[#123C73]/3 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#F4C430]/3 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-[#123C73]/2 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <div className="text-center mb-12 lg:mb-20">
           <Reveal>
-            <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 rounded-full border border-blue-300 mb-6">
-              <div className="w-2 h-2 bg-blue-600 rounded-full mr-2 animate-pulse"></div>
-              <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent font-semibold text-sm tracking-wide">
-                ACADEMIC RESULTS {currentYear}
+            <div className="inline-flex items-center px-5 py-2.5 bg-[#123C73]/5 rounded-full border border-[#123C73]/10 mb-6">
+              <Trophy className="w-4 h-4 text-[#F4C430] mr-2" />
+              <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                Academic Results {currentYear}
               </span>
             </div>
           </Reveal>
 
           <Reveal delay={100}>
-            <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-[#1B1F24] mb-6 leading-tight">
               Academic{" "}
-              <span className="bg-gradient-to-r from-blue-600 via-cyan-600 to-sky-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
                 Results
               </span>
             </h1>
           </Reveal>
 
           <Reveal delay={200}>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-[#667085] max-w-3xl mx-auto leading-relaxed font-light">
               Celebrating Excellence and Achievement in Education
             </p>
           </Reveal>
+
+          {/* Decorative Divider */}
+          <div className="flex items-center justify-center gap-4 mt-8">
+            <div className="h-px w-12 bg-[#F4C430]/30"></div>
+            <Award className="w-5 h-5 text-[#F4C430]" />
+            <div className="h-px w-12 bg-[#F4C430]/30"></div>
+          </div>
         </div>
 
         {/* Hero Image */}
-        <Reveal delay={400}>
-          <div className="relative overflow-hidden rounded-2xl shadow-2xl mb-20">
+        <Reveal delay={300}>
+          <div className="relative overflow-hidden rounded-3xl shadow-2xl shadow-[#123C73]/10 mb-16 lg:mb-24 group">
             <img
               src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80"
               alt="Students celebrating academic success"
-              className="w-full h-96 object-cover"
+              className="w-full h-80 lg:h-96 object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-blue-900/60 via-blue-900/20 to-transparent"></div>
-            <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-              <h2 className="text-3xl lg:text-4xl font-bold mb-2">
-                Outstanding Performance
-              </h2>
-              <p className="text-lg text-blue-100">
-                Our students continue to excel and set new benchmarks
-              </p>
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/90 via-[#123C73]/40 to-transparent"></div>
+            
+            {/* Content Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-8 lg:p-12 text-white">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-12 h-12 bg-[#F4C430] rounded-2xl flex items-center justify-center">
+                  <Trophy className="w-6 h-6 text-[#123C73]" />
+                </div>
+                <div>
+                  <h2 className="text-3xl lg:text-4xl font-bold mb-1">
+                    Outstanding Performance
+                  </h2>
+                  <p className="text-lg text-white/80">
+                    Our students continue to excel and set new benchmarks
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </Reveal>
 
         {/* Error State */}
         {error && (
-          <div className="mb-20">
+          <div className="mb-16 lg:mb-24">
             <Reveal>
-              <div className="bg-red-50 border border-red-200 rounded-xl p-8 text-center">
-                <div className="inline-flex items-center px-4 py-2 bg-red-100 rounded-full border border-red-200 mb-4">
-                  <div className="w-2 h-2 bg-red-500 rounded-full mr-2"></div>
-                  <span className="text-red-600 font-semibold text-sm tracking-wide">
-                    ERROR
-                  </span>
+              <div className="bg-white rounded-3xl p-8 lg:p-12 shadow-lg border border-[#123C73]/5 text-center">
+                <div className="w-20 h-20 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                  <Sparkles className="w-10 h-10 text-red-500" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                <h3 className="text-2xl font-bold text-[#1B1F24] mb-3">
                   Unable to Load Results
                 </h3>
-                <p className="text-red-600 mb-6">{error}</p>
+                <p className="text-[#667085] mb-6">{error}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#123C73] text-white font-semibold rounded-xl hover:bg-[#0A2348] transition-all duration-300"
                 >
+                  <RefreshCw className="w-4 h-4" />
                   Retry
                 </button>
               </div>
@@ -214,34 +229,48 @@ const ResultsPage = () => {
 
         {/* Loading State */}
         {loading && !error && (
-          <div className="mb-20">
+          <div>
+            {/* Section Divider */}
+            <div className="flex items-center justify-center gap-4 mb-12">
+              <div className="h-px flex-1 bg-[#123C73]/10"></div>
+              <div className="px-6 py-2 bg-[#123C73]/5 rounded-full border border-[#123C73]/10">
+                <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                  Downloads
+                </span>
+              </div>
+              <div className="h-px flex-1 bg-[#123C73]/10"></div>
+            </div>
+
             <Reveal delay={400}>
-              <h3 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-4">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1B1F24] text-center mb-4">
                 Download{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
                   Results
                 </span>
               </h3>
-              <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+              <p className="text-lg text-[#667085] text-center mb-12 max-w-2xl mx-auto">
                 Access detailed board examination results in PDF format
               </p>
             </Reveal>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
               {[...Array(2)].map((_, i) => (
                 <div
                   key={i}
-                  className="bg-white rounded-xl p-6 shadow-lg border border-gray-100"
+                  className="bg-white rounded-3xl p-6 lg:p-8 shadow-lg border border-[#123C73]/5 animate-pulse"
                 >
                   <div className="flex items-start gap-4 mb-4">
-                    <Skeleton circle width={64} height={64} />
-                    <div className="flex-1">
-                      <Skeleton height={24} width="80%" className="mb-2" />
-                      <Skeleton height={16} width="60%" />
+                    <div className="w-16 h-16 bg-[#E8EDF5] rounded-2xl flex-shrink-0"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-6 bg-[#E8EDF5] rounded-lg w-3/4"></div>
+                      <div className="h-4 bg-[#E8EDF5] rounded-lg w-1/2"></div>
                     </div>
                   </div>
-                  <Skeleton height={16} count={2} className="mb-6" />
-                  <Skeleton height={48} />
+                  <div className="space-y-2 mb-6">
+                    <div className="h-4 bg-[#E8EDF5] rounded-lg w-full"></div>
+                    <div className="h-4 bg-[#E8EDF5] rounded-lg w-4/5"></div>
+                  </div>
+                  <div className="h-12 bg-[#E8EDF5] rounded-xl w-full"></div>
                 </div>
               ))}
             </div>
@@ -250,83 +279,98 @@ const ResultsPage = () => {
 
         {/* Results Grid */}
         {!loading && !error && results.length > 0 && (
-          <div className="mb-20">
+          <div>
+            {/* Section Divider */}
+            <div className="flex items-center justify-center gap-4 mb-12">
+              <div className="h-px flex-1 bg-[#123C73]/10"></div>
+              <div className="px-6 py-2 bg-[#123C73]/5 rounded-full border border-[#123C73]/10">
+                <span className="text-[#123C73] font-semibold text-sm tracking-wider uppercase">
+                  Downloads
+                </span>
+              </div>
+              <div className="h-px flex-1 bg-[#123C73]/10"></div>
+            </div>
+
             <Reveal delay={400}>
-              <h3 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-4">
+              <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#1B1F24] text-center mb-4">
                 Download{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-[#123C73] to-[#0A2348] bg-clip-text text-transparent">
                   Results
                 </span>
               </h3>
-              <p className="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+              <p className="text-lg text-[#667085] text-center mb-12 max-w-2xl mx-auto">
                 Access detailed board examination results in PDF format
               </p>
             </Reveal>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
               {results.map((result, index) => (
                 <Reveal key={result.id} delay={500 + index * 100}>
-                  <div className="bg-white rounded-xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100 group">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl flex items-center justify-center text-4xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                        📄
+                  <div className="group relative bg-white rounded-3xl p-6 lg:p-8 shadow-lg hover:shadow-2xl transition-all duration-500 border border-[#123C73]/5 hover:border-[#F4C430]/20">
+                    {/* Top Gradient Line */}
+                    <div className="absolute top-0 left-4 right-4 h-1 bg-gradient-to-r from-[#123C73] to-[#F4C430] rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500"></div>
+                    
+                    <div className="flex items-start gap-4 mb-5">
+                      {/* Icon */}
+                      <div className="relative flex-shrink-0">
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#F4C430]/20 to-[#123C73]/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+                        <div className="relative w-16 h-16 bg-gradient-to-br from-[#F4C430]/10 to-[#123C73]/10 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-300">
+                          📄
+                        </div>
                       </div>
+                      
                       <div className="flex-1">
-                        <h4 className="text-xl font-bold text-gray-900 mb-2">
+                        <h4 className="text-xl font-bold text-[#1B1F24] mb-2 group-hover:text-[#123C73] transition-colors duration-300">
                           {result.title}
                         </h4>
-                        <div className="flex flex-wrap gap-3 text-sm text-gray-500">
+                        <div className="flex flex-wrap gap-3 text-sm text-[#667085]">
                           {result.document?.filename && (
                             <span className="flex items-center gap-1">
-                              📎 {result.document.filename}
+                              <FileText className="w-4 h-4" />
+                              {result.document.filename}
                             </span>
                           )}
                           {result.document?.filesize && (
                             <span className="flex items-center gap-1">
-                              💾 {formatBytes(result.document.filesize)}
+                              <Download className="w-4 h-4" />
+                              {formatBytes(result.document.filesize)}
                             </span>
                           )}
                         </div>
                       </div>
                     </div>
                     
-                    <p className="text-gray-600 mb-6 leading-relaxed">
+                    <p className="text-[#667085] mb-5 leading-relaxed">
                       {result.description}
                     </p>
 
                     {result.document?.createdAt && (
-                      <p className="text-sm text-gray-500 mb-4">
-                        📅 Uploaded: {new Date(result.document.createdAt).toLocaleDateString('en-IN', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric'
-                        })}
-                      </p>
+                      <div className="flex items-center gap-2 text-sm text-[#667085] mb-5">
+                        <Calendar className="w-4 h-4" />
+                        <span>
+                          Uploaded: {new Date(result.document.createdAt).toLocaleDateString('en-IN', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
                     )}
                     
                     <button
                       onClick={() => handleDownload(result.document?.url, result.title)}
                       disabled={!result.document?.url}
-                      className={`w-full font-bold py-3 px-6 rounded-lg transition-all duration-300 shadow-md flex items-center justify-center gap-2 ${
+                      className={`group/btn w-full font-bold py-4 px-6 rounded-2xl transition-all duration-300 shadow-lg flex items-center justify-center gap-2 ${
                         result.document?.url
-                          ? 'bg-gradient-to-r from-blue-600 to-cyan-600 text-white hover:from-blue-700 hover:to-cyan-700 hover:shadow-lg transform hover:-translate-y-1'
-                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          ? 'bg-[#123C73] text-white hover:bg-[#0A2348] hover:shadow-xl hover:shadow-[#123C73]/20 hover:-translate-y-1'
+                          : 'bg-[#E8EDF5] text-[#667085] cursor-not-allowed'
                       }`}
                     >
-                      <svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                        />
-                      </svg>
+                      <Download className="w-5 h-5 group-hover/btn:translate-y-0.5 transition-transform duration-300" />
                       {result.document?.url ? 'Download PDF' : 'Not Available'}
+                      {result.document?.url && (
+                        <ArrowRight className="w-5 h-5 ml-2 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                      )}
                     </button>
                   </div>
                 </Reveal>
@@ -337,21 +381,24 @@ const ResultsPage = () => {
 
         {/* Empty State */}
         {!loading && !error && results.length === 0 && (
-          <div className="mb-20">
+          <div>
             <Reveal delay={400}>
-              <div className="bg-white rounded-xl p-12 shadow-lg border border-gray-100 text-center">
-                <div className="text-6xl mb-4">📋</div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="bg-white rounded-3xl p-12 shadow-lg border border-[#123C73]/5 text-center">
+                <div className="w-24 h-24 bg-[#123C73]/5 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                  <Trophy className="w-12 h-12 text-[#667085]/30" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#1B1F24] mb-3">
                   No Results Available
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-[#667085] mb-8">
                   Results will be published here once they are available.
                 </p>
                 <a
                   href="/contact-us"
-                  className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:from-blue-700 hover:to-cyan-700 transition-all duration-300 shadow-md hover:shadow-lg"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#123C73] text-white font-bold rounded-2xl hover:bg-[#0A2348] transition-all duration-300 hover:shadow-xl hover:shadow-[#123C73]/20"
                 >
                   Contact Us for More Information
+                  <ArrowRight className="w-5 h-5" />
                 </a>
               </div>
             </Reveal>
@@ -359,23 +406,19 @@ const ResultsPage = () => {
         )}
       </div>
 
-      {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+      {/* Decorative Floating Elements */}
+      <div className="absolute top-20 left-10 w-3 h-3 bg-[#123C73] rounded-full animate-pulse opacity-20"></div>
       <div
-        className="absolute top-32 right-20 w-2 h-2 bg-cyan-500 rounded-full animate-pulse"
+        className="absolute top-32 right-20 w-2 h-2 bg-[#F4C430] rounded-full animate-pulse opacity-30"
         style={{ animationDelay: "1s" }}
       ></div>
       <div
-        className="absolute bottom-20 left-20 w-4 h-4 bg-sky-400 rounded-full animate-pulse"
+        className="absolute bottom-20 left-20 w-4 h-4 bg-[#123C73] rounded-full animate-pulse opacity-20"
         style={{ animationDelay: "2s" }}
       ></div>
       <div
-        className="absolute bottom-40 right-32 w-3 h-3 bg-blue-600 rounded-full animate-pulse"
+        className="absolute bottom-40 right-32 w-3 h-3 bg-[#F4C430] rounded-full animate-pulse opacity-30"
         style={{ animationDelay: "1.5s" }}
-      ></div>
-      <div
-        className="absolute top-1/2 left-32 w-2 h-2 bg-cyan-500 rounded-full animate-pulse"
-        style={{ animationDelay: "0.5s" }}
       ></div>
     </div>
   );
