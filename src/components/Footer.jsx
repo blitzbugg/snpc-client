@@ -1,79 +1,99 @@
 import React from 'react';
-import { Facebook, Youtube } from 'lucide-react';
+import { Facebook, Youtube, MapPin, Phone, Mail, ArrowRight, ExternalLink, Building2 } from 'lucide-react';
+import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#012050] text-white py-16 px-4">
-      <div className="max-w-6xl mx-auto">
+    <footer className="bg-gradient-to-br from-[#0A2348] to-[#123C73] text-white relative overflow-hidden">
+      {/* Decorative Background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-[#F4C430]/5 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-white/5 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative z-10">
         {/* Logo Section */}
-        <div className="flex justify-center mb-12">
-          <div className="bg-white p-4 rounded-lg shadow-lg">
-            <img 
-              src="/logo.jpg" 
-              alt="Sree Buddha Central School"
-              className="h-16 w-auto"
-            />
+        <div className="flex justify-center mb-12 lg:mb-16">
+          <div className="relative">
+            <div className="absolute inset-0 bg-[#F4C430]/20 rounded-2xl blur-xl"></div>
+            <div className="relative bg-white p-4 rounded-2xl shadow-2xl shadow-[#F4C430]/10">
+              <img 
+                src="/logo.jpg" 
+                alt="Sree Narayana Public School"
+                className="h-16 md:h-20 w-auto"
+              />
+            </div>
           </div>
         </div>
 
         {/* Footer Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-12 mb-12 lg:mb-16">
           {/* Quick Links */}
           <div>
-            <h3 className="text-xl font-semibold mb-6">Quick Links</h3>
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#F4C430]/20 rounded-lg flex items-center justify-center">
+                <ArrowRight className="w-4 h-4 text-[#F4C430]" />
+              </div>
+              Quick Links
+            </h3>
             <ul className="space-y-3">
-              <li>
-                <a href="/" className="text-white/90 hover:text-[#FBC02D] transition-colors">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="/the-school/messages" className="text-white/90 hover:text-[#FBC02D] transition-colors">
-                  Words from Leaders
-                </a>
-              </li>
-              <li>
-                <a href="/gallery" className="text-white/90 hover:text-[#FBC02D] transition-colors">
-                  Our Gallery
-                </a>
-              </li>
-              <li>
-                <a href="/contact-us" className="text-white/90 hover:text-[#FBC02D] transition-colors">
-                  Contact Us
-                </a>
-              </li>
+              {[
+                { href: "/", label: "Home" },
+                { href: "/the-school/messages", label: "Words from Leaders" },
+                { href: "/gallery", label: "Our Gallery" },
+                { href: "/contact-us", label: "Contact Us" },
+                { href: "/admission", label: "Admissions" },
+              ].map((link, index) => (
+                <li key={index}>
+                  <Link
+                    href={link.href}
+                    className="group flex items-center text-white/70 hover:text-[#F4C430] transition-all duration-300"
+                  >
+                    <span className="w-1.5 h-1.5 bg-[#F4C430] rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* Social Media */}
           <div>
-            <h3 className="text-xl font-semibold mb-6">Social Media</h3>
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#F4C430]/20 rounded-lg flex items-center justify-center">
+                <ExternalLink className="w-4 h-4 text-[#F4C430]" />
+              </div>
+              Connect With Us
+            </h3>
             <ul className="space-y-3">
               <li>
                 <a 
-                  href="#" 
-                  className="flex items-center text-white/90 hover:text-[#FBC02D] transition-colors"
+                  href="https://www.facebook.com/p/S-N-Public-School-Kizhavoor-Mukhathala-100067848552245/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 text-white/70 hover:text-[#F4C430] transition-all duration-300 bg-white/5 rounded-xl p-3 hover:bg-white/10"
                 >
-                  <span className="mr-2">𝕏</span>
-                  Twitter (X)
+                  <div className="w-10 h-10 bg-[#1877F2]/20 rounded-lg flex items-center justify-center group-hover:bg-[#1877F2]/30 transition-colors duration-300">
+                    <Facebook className="w-5 h-5 text-[#1877F2]" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">Facebook</p>
+                    <p className="text-xs text-white/50">Follow our page</p>
+                  </div>
                 </a>
               </li>
               <li>
                 <a 
-                  href="#" 
-                  className="flex items-center text-white/90 hover:text-[#FBC02D] transition-colors"
+                  href="#"
+                  className="group flex items-center gap-3 text-white/70 hover:text-[#F4C430] transition-all duration-300 bg-white/5 rounded-xl p-3 hover:bg-white/10"
                 >
-                  <Facebook size={16} className="mr-2" />
-                  Facebook
-                </a>
-              </li>
-              <li>
-                <a 
-                  href="#" 
-                  className="flex items-center text-white/90 hover:text-[#FBC02D] transition-colors"
-                >
-                  <Youtube size={16} className="mr-2" />
-                  Youtube
+                  <div className="w-10 h-10 bg-[#FF0000]/20 rounded-lg flex items-center justify-center group-hover:bg-[#FF0000]/30 transition-colors duration-300">
+                    <Youtube className="w-5 h-5 text-[#FF0000]" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-white">YouTube</p>
+                    <p className="text-xs text-white/50">Watch our videos</p>
+                  </div>
                 </a>
               </li>
             </ul>
@@ -81,49 +101,74 @@ const Footer = () => {
 
           {/* Get in touch */}
           <div>
-            <h3 className="text-xl font-semibold mb-6">Get in touch</h3>
-            <div className="space-y-4">
-              <div className="flex items-start">
-                <div className="w-5 h-5 mt-1 mr-3 flex-shrink-0">
-                  <svg className="w-full h-full fill-current" viewBox="0 0 24 24">
-                    <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-                  </svg>
+            <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
+              <div className="w-8 h-8 bg-[#F4C430]/20 rounded-lg flex items-center justify-center">
+                <Building2 className="w-4 h-4 text-[#F4C430]" />
+              </div>
+              Get in Touch
+            </h3>
+            <div className="space-y-5">
+              {/* Address */}
+              <div className="flex items-start gap-3 group cursor-default">
+                <div className="w-10 h-10 bg-[#F4C430]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#F4C430]/20 transition-colors duration-300">
+                  <MapPin className="w-5 h-5 text-[#F4C430]" />
                 </div>
-                <p className="text-white/90 leading-relaxed">
-                  Sree Buddha Central School Edakkulangara<br/>
-                  Karunagappally Kollam PIN - 690562"
-                </p>
+                <div>
+                  <p className="text-white/90 leading-relaxed text-sm">
+                    Sree Narayana Public School<br/>
+                    Kizhavoor, Mukhathala<br/>
+                    Kollam, Kerala - 691577
+                  </p>
+                </div>
               </div>
               
-              <div className="flex items-center">
-                <div className="w-5 h-5 mr-3 flex-shrink-0">
-                  <svg className="w-full h-full fill-current" viewBox="0 0 24 24">
-                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
-                  </svg>
+              {/* Phone */}
+              <div className="flex items-center gap-3 group cursor-default">
+                <div className="w-10 h-10 bg-[#F4C430]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#F4C430]/20 transition-colors duration-300">
+                  <Phone className="w-5 h-5 text-[#F4C430]" />
                 </div>
-                <p className="text-white/90">0476 2662489, 2664999</p>
+                <a 
+                  href="tel:8891720292" 
+                  className="text-white/90 hover:text-[#F4C430] transition-colors duration-300 text-sm"
+                >
+                  8891720292
+                </a>
               </div>
               
-              <div className="flex items-start">
-                <div className="w-5 h-5 mt-1 mr-3 flex-shrink-0">
-                  <svg className="w-full h-full fill-current" viewBox="0 0 24 24">
-                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                  </svg>
+              {/* Email */}
+              <div className="flex items-start gap-3 group cursor-default">
+                <div className="w-10 h-10 bg-[#F4C430]/10 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:bg-[#F4C430]/20 transition-colors duration-300">
+                  <Mail className="w-5 h-5 text-[#F4C430]" />
                 </div>
-                <p className="text-white/90 break-all leading-relaxed">sbcskarunagappally@gmail.com</p>
+                <a 
+                  href="mailto:indianpublicschoolkollam@gmail.com" 
+                  className="text-white/90 hover:text-[#F4C430] transition-colors duration-300 text-sm break-all"
+                >
+                  indianpublicschoolkollam@gmail.com
+                </a>
               </div>
             </div>
           </div>
         </div>
 
         {/* Copyright Section */}
-        <div className="border-t border-white/20 pt-8 text-center">
-          <p className="text-white/80 text-sm">
-            All rights are reserved, ©2025 Sree Buddha Central School &nbsp; | &nbsp; 
-            <span className="text-white/60">
-              Designed & Developed by <a href="https://www.astralyne.com/" className="hover:text-[#FBC02D] transition-colors">Astralyne.com</a> in association with <a href="https://www.obsidyne.com/" className="hover:text-[#FBC02D] transition-colors">Obsidyne</a>
-            </span>
-          </p>
+        <div className="border-t border-white/10 pt-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+            <p className="text-white/60 text-sm">
+              © {new Date().getFullYear()} Sree Narayana Public School. All rights reserved.
+            </p>
+            <p className="text-white/40 text-sm">
+              Designed & Developed by{" "}
+              <a 
+                href="https://www.obsidyne.com/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-[#F4C430] hover:text-[#FFD95A] transition-colors duration-300 font-medium"
+              >
+                Obsidyne
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </footer>
