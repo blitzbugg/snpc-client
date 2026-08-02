@@ -1,17 +1,21 @@
 @import "tailwindcss";
 
-  @theme {
-    --color-primary: #0D47A1;
-    --color-primary-dark: #012050;
-    --color-secondary: #FBC02D;
-    --color-accent: #FFFFFF;
-    --color-neutral: #F5F5F5;
-    --color-dark: #212121;
-    --color-light-dark: #6E6E6E;
-    --color-off-white: #F3F3F3;
-    
-    --font-family-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  }
+ @theme {
+  --color-primary: #123C73;
+  --color-primary-dark: #0A2348;
+
+  --color-secondary: #F4C430;
+  --color-accent: #FFD95A;
+
+  --color-neutral: #F7F9FC;
+  --color-dark: #1B1F24;
+  --color-light-dark: #667085;
+  --color-off-white: #FCFCFD;
+
+  --font-family-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}
 
 /* Custom Animations */
 @keyframes fadeIn {
