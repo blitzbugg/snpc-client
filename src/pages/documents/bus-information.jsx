@@ -214,17 +214,23 @@ export default function BusTablesPage({ initialData, error }) {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="bg-[#F7F9FC]">
-                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tl-xl flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-[#F4C430]" />
-                        Stop
+                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tl-xl">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-[#F4C430] flex-shrink-0" />
+                          <span>Stop</span>
+                        </div>
                       </th>
-                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-[#F4C430]" />
-                        Morning
+                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider">
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-[#F4C430] flex-shrink-0" />
+                          <span>Morning</span>
+                        </div>
                       </th>
-                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tr-xl flex items-center gap-2">
-                        <Clock className="w-4 h-4 text-[#F4C430]" />
-                        Evening
+                      <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tr-xl">
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-[#F4C430] flex-shrink-0" />
+                          <span>Evening</span>
+                        </div>
                       </th>
                     </tr>
                   </thead>
@@ -240,10 +246,10 @@ export default function BusTablesPage({ initialData, error }) {
                       >
                         <td className="p-4 border-b border-[#123C73]/5 font-medium text-[#1B1F24]">
                           <div className="flex items-center gap-2">
-                            <span className="w-6 h-6 bg-[#123C73]/5 rounded-lg flex items-center justify-center text-xs font-bold text-[#123C73]">
+                            <span className="w-6 h-6 bg-[#123C73]/5 rounded-lg flex items-center justify-center text-xs font-bold text-[#123C73] flex-shrink-0">
                               {i + 1}
                             </span>
-                            {stop.stop}
+                            <span>{stop.stop}</span>
                           </div>
                         </td>
                         <td className="p-4 border-b border-[#123C73]/5 text-[#667085]">
