@@ -241,7 +241,7 @@ const LeadersMessages = () => {
                             <Award className="w-4 h-4 text-[#F4C430]" />
                             <p className="text-sm sm:text-base text-[#667085] font-medium">
                               {leader.name === "Prof. K. Sasikumar" 
-                                ? "Founder Chairman" 
+                                ? " Chairman" 
                                 : "Principal"
                               }
                             </p>
