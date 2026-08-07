@@ -7,7 +7,7 @@ import LeadersMessages from "@/components/LeadersMessages";
 import Gallery from "@/components/Gallery";
 import AnnouncementBoard from "@/components/AnnouncementBoard";
 
-const HERO_VIDEO_SRC = "/sample.mp4";
+const HERO_VIDEO_SRC = "https://res.cloudinary.com/dslrhfcwf/video/upload/v1786081027/hnima38ns9f6nhnyv40r.mp4";
 
 function Reveal({ children, className = "", delay = 0 }) {
   const ref = useRef(null);
@@ -68,7 +68,7 @@ function HeroVideo() {
   return (
     <div className="absolute inset-0 z-0">
       {hasVideo ? (
-        <video ref={videoRef} autoPlay loop muted={isMuted} playsInline preload="metadata" className="h-full w-full object-cover" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}>
+        <video ref={videoRef} autoPlay loop muted={isMuted} playsInline preload="auto" className="h-full w-full object-cover" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}>
           <source src={HERO_VIDEO_SRC} type="video/mp4" />
         </video>
       ) : <VideoFallback />}
