@@ -259,32 +259,6 @@ const PrePrimaryPage = () => {
                         
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/30 via-transparent to-transparent"></div>
-
-                        {/* Stats Overlay */}
-                        <div className="absolute bottom-6 left-6 right-6">
-                          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-[#123C73]/10">
-                            <div className="grid grid-cols-2 gap-6 text-center">
-                              <div>
-                                <div className="flex items-center justify-center gap-2 mb-2">
-                                  <Baby className="w-5 h-5 text-[#123C73]" />
-                                  <p className="text-2xl md:text-4xl font-extrabold text-[#123C73]">
-                                    2.5-5
-                                  </p>
-                                </div>
-                                <p className="text-xs text-[#667085] font-semibold uppercase tracking-wider">Age Years</p>
-                              </div>
-                              <div>
-                                <div className="flex items-center justify-center gap-2 mb-2">
-                                  <Heart className="w-5 h-5 text-[#123C73]" />
-                                  <p className="text-2xl md:text-4xl font-extrabold text-[#123C73]">
-                                    1:10
-                                  </p>
-                                </div>
-                                <p className="text-xs text-[#667085] font-semibold uppercase tracking-wider">Teacher Ratio</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
 
                       {/* Decorative Element */}
