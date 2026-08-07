@@ -176,7 +176,7 @@ const ResultsPage = () => {
         <Reveal delay={300}>
           <div className="relative overflow-hidden rounded-3xl shadow-2xl shadow-[#123C73]/10 mb-16 lg:mb-24 group">
             <img
-              src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80"
+              src="/result-page.jpg"
               alt="Students celebrating academic success"
               className="w-full h-80 lg:h-96 object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
