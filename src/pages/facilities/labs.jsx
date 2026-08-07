@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FlaskConical, Microscope, Atom, Beaker, TestTube, Sparkles, RefreshCw } from 'lucide-react';
+import { FlaskConical, Microscope, Atom, Beaker, TestTube, Sparkles, RefreshCw, Computer } from 'lucide-react';
 
 // Skeleton Loader Component
 const LabCardSkeleton = ({ index }) => (
@@ -86,7 +86,7 @@ const Labs = () => {
   };
 
   // Lab icons mapping
-  const labIcons = [FlaskConical, Microscope, Atom, Beaker, TestTube];
+  const labIcons = [Computer, FlaskConical, Microscope, Atom, Beaker, TestTube];
 
   return (
     <div className="min-h-screen bg-[#F7F9FC] py-16 lg:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
