@@ -85,9 +85,6 @@ const Labs = () => {
     fetchLabs();
   };
 
-  // Lab icons mapping
-  const labIcons = [Computer, FlaskConical, Microscope, Atom, Beaker, TestTube];
-
   return (
     <div className="min-h-screen bg-[#F7F9FC] py-16 lg:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       {/* Decorative Background */}
@@ -155,7 +152,6 @@ const Labs = () => {
             {labs.length > 0 ? (
               <div className="space-y-8 lg:space-y-10">
                 {labs.map((lab, index) => {
-                  const IconComponent = labIcons[index % labIcons.length];
                   return (
                     <div 
                       key={lab.id}
@@ -178,13 +174,6 @@ const Labs = () => {
                           
                           {/* Image Overlay */}
                           <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/40 via-transparent to-transparent"></div>
-                          
-                          {/* Lab Icon Badge */}
-                          <div className="absolute top-4 left-4">
-                            <div className="w-12 h-12 bg-[#F4C430] rounded-2xl flex items-center justify-center shadow-lg">
-                              <IconComponent className="w-6 h-6 text-[#123C73]" />
-                            </div>
-                          </div>
 
                           {/* Image Label */}
                           <div className="absolute bottom-4 left-4">
@@ -196,11 +185,8 @@ const Labs = () => {
                         
                         {/* Content Section */}
                         <div className="flex-1 p-6 lg:p-8">
-                          {/* Title with accent */}
+                          {/* Title without icon */}
                           <div className="flex items-center gap-3 mb-4">
-                            <div className="w-8 h-8 bg-[#F4C430]/10 rounded-xl flex items-center justify-center">
-                              <IconComponent className="w-4 h-4 text-[#123C73]" />
-                            </div>
                             <h3 className="text-xl lg:text-2xl font-bold text-[#1B1F24] group-hover:text-[#123C73] transition-colors duration-300">
                               {lab.title}
                             </h3>
