@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Head from "next/head";
-import { ArrowDown, ArrowRight, ChevronRight, Pause, Play, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { ArrowDown, ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 import QuickInformation from "@/components/QuickInformation";
 import SchoolEvents from "@/components/SchoolEvents";
 import LeadersMessages from "@/components/LeadersMessages";
@@ -44,39 +44,15 @@ function VideoFallback() {
 
 function HeroVideo() {
   const videoRef = useRef(null);
-  const [isMuted, setMuted] = useState(true);
-  const [isPlaying, setPlaying] = useState(true);
-  const hasVideo = Boolean(HERO_VIDEO_SRC);
-
-  const togglePlay = async () => {
-    if (!videoRef.current) return;
-    if (videoRef.current.paused) {
-      await videoRef.current.play();
-      setPlaying(true);
-    } else {
-      videoRef.current.pause();
-      setPlaying(false);
-    }
-  };
-
-  const toggleMute = () => {
-    if (!videoRef.current) return;
-    videoRef.current.muted = !videoRef.current.muted;
-    setMuted(videoRef.current.muted);
-  };
 
   return (
     <div className="absolute inset-0 z-0">
-      {hasVideo ? (
-        <video ref={videoRef} autoPlay loop muted={isMuted} playsInline preload="auto" className="h-full w-full object-cover" onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}>
+      {HERO_VIDEO_SRC ? (
+        <video ref={videoRef} autoPlay loop muted playsInline preload="auto" className="h-full w-full object-cover">
           <source src={HERO_VIDEO_SRC} type="video/mp4" />
         </video>
       ) : <VideoFallback />}
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(0deg,rgba(5,24,48,0.46)_0%,transparent_52%,rgba(5,24,48,0.2)_100%)]" />
-      {hasVideo && <div className="absolute bottom-5 right-5 z-30 hidden gap-2 sm:flex">
-        <button onClick={togglePlay} aria-label={isPlaying ? "Pause campus film" : "Play campus film"} className="hero-control">{isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}</button>
-        <button onClick={toggleMute} aria-label={isMuted ? "Unmute campus film" : "Mute campus film"} className="hero-control">{isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}</button>
-      </div>}
     </div>
   );
 }
@@ -105,7 +81,10 @@ export default function Home() {
           <p className="mx-auto mt-5 max-w-lg text-sm leading-6 text-white/90 drop-shadow-md sm:text-base">A community where curiosity, character and confidence grow together.</p>
         </header>
 
-        <div className="absolute bottom-5 left-1/2 z-40 w-[calc(100%-2rem)] -translate-x-1/2 sm:bottom-7 sm:left-auto sm:right-5 sm:w-auto sm:translate-x-0 lg:right-8"><AnnouncementBoard /></div>
+        <div className="absolute bottom-5 left-5 z-40 w-[calc(100%-2rem)] sm:bottom-7 sm:w-auto lg:left-8">
+          <AnnouncementBoard />
+        </div>
+
         <a href="#about-us" aria-label="Explore more" className="absolute bottom-7 left-1/2 z-20 hidden -translate-x-1/2 text-white/90 transition hover:text-[#F4C430] xl:inline-flex"><ArrowDown className="h-5 w-5 animate-bounce" /></a>
       </section>
 
@@ -125,7 +104,7 @@ export default function Home() {
 
       <section className="relative bg-[#123C73] py-11 text-center text-white sm:py-14">
         <div className="absolute inset-0 quote-pattern opacity-30" />
-        <Reveal className="relative mx-auto max-w-4xl px-5"><Sparkles className="mx-auto h-4 w-4 text-[#F4C430]" /><blockquote className="font-display mt-4 text-2xl leading-snug sm:text-3xl lg:text-4xl">“One caste, one religion, one God for mankind.”</blockquote><p className="mt-4 text-[11px] font-bold uppercase tracking-[0.22em] text-[#F4C430]">Sree Narayana Guru</p></Reveal>
+        <Reveal className="relative mx-auto max-w-4xl px-5"><Sparkles className="mx-auto h-4 w-4 text-[#F4C430]" /><blockquote className="font-display mt-4 text-2xl leading-snug sm:text-3xl lg:text-4xl">"One caste, one religion, one God for mankind."</blockquote><p className="mt-4 text-[11px] font-bold uppercase tracking-[0.22em] text-[#F4C430]">Sree Narayana Guru</p></Reveal>
       </section>
 
       <section id="about-us" className="relative scroll-mt-20 bg-white py-20 sm:py-24 lg:py-32">
@@ -140,7 +119,6 @@ export default function Home() {
 
       <style jsx global>{`
         .font-display { font-family: "Playfair Display", Georgia, serif !important; }
-        .hero-control { display: grid; height: 2.5rem; width: 2.5rem; place-items: center; border-radius: 9999px; background: rgba(10,35,72,.7); color: white; backdrop-filter: blur(10px); }
         .hero-grid { background-image: linear-gradient(rgba(255,255,255,.16) 1px, transparent 1px), linear-gradient(90deg,rgba(255,255,255,.16) 1px,transparent 1px); background-size: 38px 38px; }
         .hero-noise { background-image: radial-gradient(rgba(255,255,255,.85) .55px, transparent .55px); background-size: 5px 5px; }
         .quote-pattern { background-image: radial-gradient(rgba(244,196,48,.45) 1px, transparent 1px); background-size: 20px 20px; }
