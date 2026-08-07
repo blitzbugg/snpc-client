@@ -259,35 +259,6 @@ const SmartClassPage = () => {
                           alt={data?.mainImage?.alt || data?.image?.alt || 'Smart Classrooms'}
                           className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
                         />
-                        
-                        {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#123C73]/30 via-transparent to-transparent"></div>
-
-                        {/* Stats Overlay */}
-                        <div className="absolute bottom-6 left-6 right-6">
-                          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-[#123C73]/10">
-                            <div className="grid grid-cols-2 gap-6 text-center">
-                              <div>
-                                <div className="flex items-center justify-center gap-2 mb-2">
-                                  <Monitor className="w-5 h-5 text-[#123C73]" />
-                                  <p className="text-2xl md:text-4xl font-extrabold text-[#123C73]">
-                                    {data?.specifications?.find(s => s.label === 'Classrooms')?.value || '25+'}
-                                  </p>
-                                </div>
-                                <p className="text-xs text-[#667085] font-semibold uppercase tracking-wider">Smart Rooms</p>
-                              </div>
-                              <div>
-                                <div className="flex items-center justify-center gap-2 mb-2">
-                                  <BookOpen className="w-5 h-5 text-[#123C73]" />
-                                  <p className="text-2xl md:text-4xl font-extrabold text-[#123C73]">
-                                    {data?.specifications?.find(s => s.label === 'Content Library')?.value || '5K+'}
-                                  </p>
-                                </div>
-                                <p className="text-xs text-[#667085] font-semibold uppercase tracking-wider">Hours Content</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
                       </div>
 
                       {/* Decorative Element */}
@@ -308,7 +279,7 @@ const SmartClassPage = () => {
                     <div className="group relative aspect-square overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer">
                       <img
                         src={img.url}
-                        alt={img.alt}
+                        alt={img.alt || `Gallery image ${index + 1}`}
                         className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                       />
                       {/* Hover Overlay */}
@@ -384,7 +355,6 @@ const SmartClassPage = () => {
                   </h3>
                   <div className="grid grid-cols-2 gap-3">
                     {features.slice(0, 4).map((feature, index) => {
-                      const IconComponent = feature.icon;
                       return (
                         <div key={index} className="flex items-center gap-2">
                           <div className="w-2 h-2 bg-[#F4C430] rounded-full flex-shrink-0"></div>
