@@ -220,7 +220,7 @@ const AcademicCalendarPage = () => {
         <Reveal delay={300}>
           <div className="relative overflow-hidden rounded-3xl shadow-2xl shadow-[#123C73]/10 mb-16 lg:mb-24 group">
             <img
-              src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&q=80"
+              src="/year-plan.jpg"
               alt="Academic calendar and planning"
               className="w-full h-80 lg:h-96 object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
