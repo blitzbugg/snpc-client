@@ -84,7 +84,9 @@ const Footer = () => {
               </li>
               <li>
                 <a 
-                  href="#"
+                  href="https://www.youtube.com/@indianpublicschool9267"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group flex items-center gap-3 text-white/70 hover:text-[#F4C430] transition-all duration-300 bg-white/5 rounded-xl p-3 hover:bg-white/10"
                 >
                   <div className="w-10 h-10 bg-[#FF0000]/20 rounded-lg flex items-center justify-center group-hover:bg-[#FF0000]/30 transition-colors duration-300">
