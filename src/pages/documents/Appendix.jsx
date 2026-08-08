@@ -17,6 +17,7 @@ export default function AppendixPage() {
     { id: 'documents', label: 'B: Documents', icon: <FileText className="w-4 h-4" /> },
     { id: 'academics', label: 'C: Academics', icon: <GraduationCap className="w-4 h-4" /> },
     { id: 'staff', label: 'D: Staff', icon: <Users className="w-4 h-4" /> },
+    { id: 'teacher_details', label: 'F: Teacher Details', icon: <Users className="w-4 h-4" /> },
     { id: 'result_x', label: 'Class X Results', icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'result_xii', label: 'Class XII Results', icon: <BarChart3 className="w-4 h-4" /> },
     { id: 'infrastructure', label: 'E: Infrastructure', icon: <Building2 className="w-4 h-4" /> },
@@ -242,6 +243,47 @@ export default function AppendixPage() {
     );
   };
 
+  // NEW: Render Teacher Details in a proper table format
+  const renderTeacherDetails = (items) => {
+    if (!items || items.length === 0) {
+      return (
+        <div className="text-center py-12">
+          <Users className="w-12 h-12 text-[#667085]/30 mx-auto mb-4" />
+          <p className="text-[#667085]">No teacher details available</p>
+        </div>
+      );
+    }
+
+    return (
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead>
+            <tr className="bg-[#F7F9FC]">
+              <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tl-xl">SL No.</th>
+              <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider">Teacher Name</th>
+              <th className="p-4 text-left text-sm font-bold text-[#123C73] uppercase tracking-wider rounded-tr-xl">Designation & Qualification</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <tr key={item.id} className={`transition-all duration-200 ${index % 2 === 0 ? 'bg-white hover:bg-[#F7F9FC]' : 'bg-[#FCFCFD] hover:bg-[#F7F9FC]'}`}>
+                <td className="p-4 border-b border-[#123C73]/5 text-sm font-semibold text-[#1B1F24]">
+                  {item.serialNumber}
+                </td>
+                <td className="p-4 border-b border-[#123C73]/5 font-medium text-[#1B1F24] text-sm">
+                  {item.title}
+                </td>
+                <td className="p-4 border-b border-[#123C73]/5 text-sm text-[#667085]">
+                  {item.details}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   const renderContent = () => {
     const items = appendixData[activeSection] || [];
 
@@ -253,6 +295,8 @@ export default function AppendixPage() {
       case 'result_x':
       case 'result_xii':
         return renderResults(items);
+      case 'teacher_details':
+        return renderTeacherDetails(items);
       default:
         return renderTwoColumnTable(items);
     }
@@ -378,7 +422,7 @@ export default function AppendixPage() {
         {/* Section Tabs */}
         <div className="bg-white rounded-2xl shadow-lg border border-[#123C73]/5 mb-8 overflow-hidden">
           <div className="overflow-x-auto">
-            <div className="flex min-w-max sm:grid sm:grid-cols-7">
+            <div className="flex min-w-max sm:grid sm:grid-cols-8">
               {sections.map((section) => (
                 <button
                   key={section.id}
